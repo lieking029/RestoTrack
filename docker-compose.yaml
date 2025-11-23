@@ -1,0 +1,72 @@
+services:
+  restotrack-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: restotrack-app
+    container_name: restotrack-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      - SERVICE_NAME=app
+      - SERVICE_TAG=dev
+    working_dir: /var/www/html
+    volumes:
+      - ./src:/var/www/html/
+      - ./src/storage:/var/www/html/storage
+    networks:
+      - app-network
+    depends_on:
+      - restotrack-database
+      - restotrack-cache
+
+  restotrack-webserver:
+    image: nginx
+    container_name: restotrack-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "9008:9008"
+    volumes:
+      - ./nginx/restotrack.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - restotrack-app
+
+  restotrack-database:
+    image: postgis/postgis:17-3.5
+    container_name: restotrack-database
+    restart: unless-stopped
+    tty: true
+    environment:
+      - POSTGRES_DB=restotrack
+      - POSTGRES_USER=restotrack_user
+      - POSTGRES_PASSWORD=restotrack
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  restotrack-cache:
+    image: redis:alpine
+    command: ["redis-server", "--requirepass", "restotrack"]
+    container_name: restotrack-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - cachedata:/data
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  cachedata:
