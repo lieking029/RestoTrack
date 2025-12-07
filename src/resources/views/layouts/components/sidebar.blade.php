@@ -34,6 +34,13 @@
                     <span>Users</span>
                 </a>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.menu.*') ? 'active' : '' }}"  href="{{ route('admin.menu.index') }}">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Menu</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link ">
                     <i class="fas fa-receipt"></i>

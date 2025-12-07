@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Admin\MenuController;
 use App\Http\Controllers\Web\Admin\ProductController;
 use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\Auth\LoginController;
@@ -24,4 +25,5 @@ Route::group([
     Route::get('/dashboard', fn() => view('admin.dashboard.index'))->name('dashboard');
     Route::resource('product', ProductController::class);
     Route::resource('user', UserController::class);
+    Route::resource('menu', MenuController::class);
 });

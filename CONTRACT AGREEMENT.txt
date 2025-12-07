@@ -1,0 +1,214 @@
+CONTRACT AGREEMENT 
+
+This Contract Agreement is made and entered into on this 25th day of October 2025, by and between Mamaril, Analiza C., Mejia, Igel D., Mojica, Glenn Luigi, and Rolle, Jayson A. (collectively referred to as the “Clients”), and John Michael (hereinafter referred to as the “Developer”). 
+
+ 
+
+PREAMBULAR CLAUSES 
+
+WHEREAS, the parties entered into a Project Agreement dated September 1, 2025, for the development of a project amounting to ₱50,000.00 (Fifty Thousand Pesos Only); 
+
+WHEREAS, due to adjustments in timelines and payment readiness, the parties mutually agree to revise the payment schedule without altering the total project cost; 
+
+NOW, THEREFORE, the parties hereby agree to the following terms and conditions: 
+
+ 
+
+1. PROJECT TITLE 
+
+RestoTrack: A Web and Mobile-Based Inventory and POS Management Utilizing B-Tree Indexing Algorithm 
+
+ 
+
+2. SCOPE OF WORK 
+
+The Developer agrees to design, develop, and deliver the project titled above, consisting of a web and mobile-based Inventory and POS Management system with B-Tree Indexing implementation. 
+
+ 
+
+3. PROJECT TIMELINE 
+
+Start Date: November 1, 2025 
+
+Final Output Delivery: Between March 2nd to 3rd week, 2026 
+
+ 
+
+4. PROJECT COST AND PAYMENT TERMS 
+
+The total project cost is ₱49,000.00 (Forty-Nine Thousand Pesos only). 
+Payment shall be made as follows: 
+
+Initial Payment: ₱20,000 upon signing of this Agreement (non-refundable; part of total cost). 
+
+Second Payment: ₱10,000 on or before November 30, 2025, upon completion of the mid-development milestone. 
+
+Third Payment: ₱9,000 on or before January 1, 2026, prior to start of testing and revisions. 
+
+Final Payment: ₱10,000 on or before February 1, 2026. The final payment must be settled in advance before the project turnover and deployment, which includes uploading the system to GitHub and other required platforms. 
+
+Breach of Payment Terms and Delay Clause: A ₱5,000 charge may be imposed if the Clients delay payment or project confirmation for more than three (3) days beyond the agreed schedule. This charge serves as compensation for schedule disruption and the Developer’s need to accommodate other projects during the delay. 
+
+Prototype Design (Figma): The total project cost does not include any pre-existing design prototype. The Developer will not create a Figma prototype as part of the ₱49,000 total cost. 
+
+IMPORTANT NOTICE: Failure to settle payments on the agreed schedule may result in project delays or suspension until payments are fulfilled. 
+
+ 
+
+5. RESPONSIBILITIES 
+
+- Developer shall ensure the timely progress and delivery of the project in accordance with the timeline. 
+
+- Clients shall provide necessary inputs, feedback, and payments as scheduled. 
+
+ 
+
+5-A. DOMAIN AND HOSTING 
+
+The Clients shall be responsible for the purchase, setup, and renewal of any domain name (DNS), web hosting, or server-related services required for the deployment of the project. 
+
+ 
+The Developer shall not shoulder or be held liable for any fees or recurring costs associated with these services. However, the Developer may assist in the setup and configuration of these services as part of the development process. 
+
+ 
+
+6. OWNERSHIP AND RIGHTS 
+
+Upon full payment of the project cost, the Clients shall have full ownership of the completed system, including all related source codes, documentation, and deliverables. 
+
+ 
+
+7. REVISIONS 
+The Developer agrees that minor revisions shall be free of charge. Major revisions, defined as requests outside the agreed Scope of Work, shall incur an additional fee starting at ₱1,500.00, subject to increase depending on the type and complexity of the revision. 
+
+ 
+
+ 
+
+8. SCOPE AND DELIMITATIONS 
+
+Scope of the Study 
+
+This study focuses on the development and implementation of RestoTrack for Hapag sa Marikina, covering the following features: 
+
+Web Application 
+
+Admin Module 
+
+Designed to help administrators manage restaurant operations efficiently. 
+
+Administrator 
+
+User Management - Add, edit, remove, or archive employee accounts. 
+
+Employee Accounts - Includes personal information, job details, and employment status and history. 
+
+Update contact details and profile information when necessary. 
+
+Sales Reports - Generates reports to help track business performance. 
+
+Sales Analytics 
+
+Track sales data to determine which dishes are the most and least popular. 
+
+Generate reports showing daily, weekly, and monthly trends. 
+
+Implement a dashboard that displays best-selling items in real time. 
+
+Generate reports that restaurant owners can access anytime. 
+
+Real-Time Inventory Tracking 
+
+Stock levels update automatically when items are sold. 
+
+Track slow and fast-moving items using the EOQ method. 
+
+Menu Management 
+
+Update, add, remove, or archive menu items. 
+
+Mark items as unavailable when out of stock. 
+
+Smart Waste Management & Expiry Date Tracking 
+
+Sends alerts to the owner and manager for expiring ingredients, preventing spoilage. 
+
+Mobile Application 
+
+Employee Module 
+
+Designed for staff members to assist them in handling orders, payments, and food preparation in a timely manner. 
+
+Barista and Server 
+
+Order Menu - An ordering module for baristas and servers to send orders directly to the kitchen and cashier, improving communication and reducing manual errors. 
+
+Cashier 
+
+Point of Sale System - POS System Upgrade – Faster transactions, better sales reports, and automatic stock updates. 
+
+Login - A login module for cashier. 
+
+Cook & Chef 
+
+Kitchen Display System (KDS) - Orders will appear on a screen in the kitchen to avoid mix-ups. 
+
+Delimitation 
+
+The system will be customized for Hapag sa Marikina and may require modifications for other businesses. 
+
+Does not include customer-facing applications for placing orders (e.g., mobile app for customers). 
+
+Limited to restaurant operations and does not extend to supply chain management beyond inventory tracking. 
+
+Requires internet connectivity for full functionality, though offline mode will support basic transactions. 
+
+B-Tree Indexing will be used primarily for sales and inventory data, and other indexing methods will not be explored in-depth. 
+
+ 
+
+9. SIGNATURES 
+
+By signing below, the parties acknowledge and agree to the terms of this Agreement. 
+
+ 
+
+______________________________ 
+
+Client Representative 
+
+(Name & Signature) 
+
+ 
+
+______________________________ 
+
+Client Representative 
+
+(Name & Signature) 
+
+ 
+
+______________________________ 
+
+Client Representative 
+
+(Name & Signature) 
+
+ 
+
+______________________________ 
+
+Client Representative 
+
+(Name & Signature) 
+
+ 
+
+______________________________ 
+
+Developer Representative 
+
+(Name & Signature) 
+
+ 

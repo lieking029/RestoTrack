@@ -1,0 +1,1408 @@
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree
+Indexing Algorithm
+Mamaril, Analiza C., Mejia, Igel D, Mojica, Glenn Luigi, Rolle, Jayson A.
+IT 304 - Capstone Project 1
+Ms Arceli F. Salo - Adviser
+May 2025
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 2
+Table of Contents
+CHAPTER 1 6
+Introduction 6
+Background of the Study 8
+Project Objectives 10
+Significance of the Study 10
+Scope and Delimitations 12
+Scope of the Study 12
+Web Application 12
+Admin Module 12
+Mobile Application 13
+Employee Module 13
+Delimitation 14
+CHAPTER 2 16
+Theoretical Framework 16
+Review of Related Literature and Studies 16
+Conceptual Framework 31
+System Architecture 32
+Definition of Terms 37
+CHAPTER 3 39
+Research Methodology 39
+Product Design 39
+Design Discussion 40
+Design Trade-Offs 43
+Developmental Research 44
+Trade-Off 1 45
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 3
+Trade-Off 2 47
+Trade-Off 3 49
+Criterion’s Performance 51
+Influence of Design Trade-Offs in Final Design 53
+Sensitivity Analysis 53
+Project Development 58
+Testing and Operating Procedures 61
+Project Evaluation 63
+Work Plan 66
+Potential for Commercialization 69
+Market Model 69
+Measurable Benefits 70
+Three-Year Product Roadmap 72
+References 73
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 4
+List of Figures
+Figure 1 Input-Process-Output 32
+Figure 2 System Architecture 33
+Figure 3 Design 1 - Web Platform Style 1 41
+Figure 4 Design 2 - Web Platform Style 2 42
+Figure 5 Design 3 - Web Platform Style 3 43
+Figure 6 Performance Ranking 45
+Figure 7 Performance Ranking: Design 1 and Design 2 46
+Figure 8 Performance Ranking: Design 1 and Design 3 47
+Figure 9 Performance Ranking: Design 2 and Design 1 48
+Figure 10 Performance Ranking: Design 2 and Design 3 49
+Figure 11 Performance Ranking: Design 3 and Design 1 50
+Figure 12 Performance Ranking: Design 3 and Design 2 51
+Figure 13 Agile Development Process 61
+Figure 14 Testing and Operating Procedures 63
+Figure 15 ISO 25010 65
+Figure 16 Market Model 70
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 5
+List of Tables
+Table 1 ConstraintsIdentified 44
+Table 2 Loading Process 45
+Table 3 Memory Usage 47
+Table 4 Response Time 49
+Table 5 Overall Ranking of each Criterion 52
+Table 6 Sensitivity Analysis Using 10-8-9 Criterion Rank 54
+Table 7 Sensitivity Analysis Using 8-9-19 Criterion Rank 55
+Table 8 Sensitivity Analysis Using 8-10-9 Criterion Rank 55
+Table 9 Sensitivity Analysis Using 10-9-8 Criterion Rank 56
+Table 10 Sensitivity Analysis Using 9-8-10 Criterion Rank 57
+Table 11 Sensitivity Analysis Using 9-10-8 Criterion Rank 57
+Table 12 Likert Scale 66
+Table 13 Work Breakdown Structure for First Semester 67
+Table 14 Work Breakdown Structure for Second Semester 68
+Table 15 Three-Year Product Roadmap 72
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 6
+CHAPTER 1
+Introduction
+In this ever faster and growing digital economy, it is becoming increasingly difficult for
+many small to medium businesses to efficiently handle their sales and inventory. Monitoring
+inventory and processing sales manually is time consuming and can result in errors. By using
+the Point of Sale (POS) and Inventory System, these problems can easily be relieved as the
+system can definitely speed up the process through faster and more accurate recording of items
+and be more organized in many different aspects. Overview of the Project This is developed to
+develop a Web and Mobile-Based Inventory and POS Management System Using B-Tree
+Indexing Algorithm that will provide the business a more efficient inventory and sales
+management.
+In order to solve the operational problems, the applicants propose an overall combination
+of Inventory and POS (Point Of Sales) system with data analytics functions. This product is
+created to handle sales, enable live inventory monitoring and carry out the inventory updates in
+an automatic manner, with the aid of a powerful sales report. With features like best-selling
+items, inventory levels and extensive reporting, the system’s goals are to help restaurant owners
+make decisions that are based on data that will improve their operations and keep customers
+happy. Extendaretail (2025) opines that contemporary POS systems with analytics capabilities,
+support businesses in simplifying procedures and enhancing service provision through the
+provision of timely information and automation of processes. Furthermore, Number Analytics
+(2023) also emphasises that companies that apply POS data analytics will benefit from
+remarkable sales performance and inventory accuracy improvements which in turn facilitate
+more accurate forecasting and decision making.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 7
+Small and medium businesses often struggle with sales and inventory
+management, particularly when relying on manual practices. These procedures can be time
+consuming, error prone, and not easily monitored for stockroom and reporting. One of which is
+Hapag sa Marikina, in which its local restaurant have a hard time nowadays on how they keep
+the count of the inventory and the transaction of their sales. To mitigate these problems, the
+proponents incubated this capstone project: the Web and Mobile-Based Inventory and POS
+Management System using B-Tree Indexing Algorithm. The system is designed to streamline the
+restaurant’s workings, from refining order-taking through real-time inventory updates to data
+analytics to aid in decision-making. Features: real-time inventory tracking, your best sellers will
+be detected and your sales reports will make it an invaluable tool for your future forecasts.
+Extendaretail (2025), supported POS systems can facilitate businesses to make their operations
+smarter by providing actionable, real-time information and automation. Number Analytics
+(2023) also wrote that companies using POS data analytics experience higher sales and greater
+inventory accuracy. This initiative will help Hapag sa Marikina to operate efficiently on a
+day-to-day basis and to be able to grow through improved handling of data.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 8
+Background of the Study
+To run a restaurant effectively you need perfect coordination between processing orders,
+keeping an eye on sales and controlling inventory. Small and midsize restaurants, however, still
+rely on hand-operated processes, leading to errors, inefficiency and additional operating
+expenses. Most of us have faced baristas or waiters writing orders down with pen and paper,
+which then has to be passed on to the kitchen and to the cashier before we receive our order. This
+method increases the risk of misdirected and non-delivered orders leading to a dissatisfied
+customer and money lost.
+Restaurants without an automation system face slow transactions, no sales tracking, and
+wrong inventory. Without it, restaurant management struggle to keep control of the available
+ingredients—a state of affairs that leads to either over-stock or shortages. Antiquated POS
+systems also impede financial transparency and prevent accurate sales reporting, making it
+difficult for business owners to know when they are making money and to make informed
+decisions.
+Hapag sa Marikina It was founded in 1984, with 36 staff and daily sales from 60,000 to
+150,000 pesos in the restobar. At present, you have to take the order manually. Waiters take
+orders from customers on paper and bring them to the kitchen and cashier. This (ordering in
+person) system of order-taking elevates the chances of errors or lost orders, especially during
+peak hours where foot traffic and orders are at its peak. It’s a bottleneck and it slows everything
+down, with customers potentially left unhappy while waiting forever for someone to answer
+their call. The restaurant has inventory management issues to deal with as well. Without
+real-time tracking, you don’t know which ingredients are running low or have been
+oversupplied. Sales are recorded on slips and are manually collated making it hard for the
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 9
+management to extract reliable and timely sales data to monitor the restaurant’s performance. For
+this reason, a Smart System that can automate OPA, SM, and IM all in a single action would be
+desirable. The proposed project will develop a system which will assist Hapag sa Marikina in
+automating its operations, accuracy, and immediate feedback in order to have efficient business
+operation.
+To keep the operations up and running, cutting-edge restaurants have adapted to digital,
+with the help of automated POS technology and inventory management solutions. These
+technologies help restaurant operators enhance financial reporting and resource management
+through dynamic data analytics, transaction speed and reduction in human error. The use of these
+technologies ensures that sales and inventory information is more accurate, reduces the
+dependency on manual calculations by people and simplifies the terms of your order fulfilment.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 10
+Project Objectives
+This project aims to develop a RestoTrack: an Inventory and POS System that will
+streamline restaurant operations, enhance inventory and sales tracking. Specifically, the study
+aims to:
+● Develop a modern POS and inventory management system that enables real-time stock
+tracking, streamlined order processing, automated sales reporting, and kitchen display
+coordination to support daily restaurant operations.
+● Implement the B-Tree Indexing Algorithm to optimize database retrieval speeds, ensuring
+faster and more efficient data access across all modules of the application.
+● Evaluate the system’s quality using the ISO 25010 software product quality standard in
+terms of Functional Suitability, Performance Efficiency, Usability, Reliability, and
+Security.
+Significance of the Study
+This study is beneficial to the following:
+● To Company Owners and Stakeholders, Staff. This is an initiative to simplify store’s
+order, sale and inventory management especially with Real-time tracking and
+sales updates. Instead of relying on outdated, slow, and manual practices, the system
+reduces errors, provides a better record of the financial history of a business, and gives
+business owners and investors what they need to help a business grow and make better
+decisions. It also saves the staff’s time by eliminating the need to record orders or count
+stock by hand. That’s faster service, fewer errors and a less stressful day for every one.
+In other words, the whole business is able to operate more smoothly with the system.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 11
+● To Customers . Ultimately the customer also benefits indirectly from this project by the
+faster and more accurate treatment. An efficient ordering process and instantaneous
+updating of stock levels mean customers have an increased chance of receiving correct
+orders quickly and every time. They never use the system, but their servicers are
+improved because the restaurant’s internal operations get better.
+● To Future Researchers. This project can provide a good reference for those student or
+research looking for restaurant management systems and business automation. It offers
+perspectives into the limitations of manual efforts, and how digitized methods can
+help work be performed more efficiently. This study will provide the foundation for
+other researches such as future technologies, system performance enhancement, and
+additional features to cater for varying business model.
+● To Developers. This project will give us a chance to use what we’ve learned to build
+something that solves a real-world problem! The result among friends It is a hands-on
+experience that enhances our learning in coding, design and problem-solving, as well as
+the opportunity for us to create something useful and practical.
+● To Information and Communication Technology (ICT). This initiative shows how
+ICT tools can help updating business functions. The solution could be used as an
+example of how inventory management and sales can streamline business operations,
+minimize or eradicate human error, and deliver a scalable solution for growth.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 12
+Scope and Delimitations
+This study focuses on developing RestoTrack, a web and mobile-based POS and
+Inventory Management System for Hapag sa Marikina. It includes features such as user
+management, sales analytics, real-time inventory tracking, and a mobile app for order handling,
+cashier transactions, and kitchen coordination to streamline operations and reduce manual errors.
+Scope of the Study
+This study focuses on the development and implementation of RestoTrack for Hapag sa
+Marikina, covering the following features:
+Web Application
+Admin Module
+Designed to help administrators manage restaurant operations efficiently.
+● Login Module
+○ A login module for admins and managers
+● User Management
+○ Add, edit, remove, or archive employee accounts.
+■ Employee Accounts
+● Includes personal information, job details, and employment status
+and history.
+● Update contact details and profile information when necessary.
+● Sales Reports
+○ Print sales reports for daily, weekly, monthly and annual operations
+○ Create a pdf or excel files for sales reports.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 13
+● Sales Analytics
+○ Track sales data to determine which dishes are the most and least popular.
+○ Generate reports showing daily, weekly, and monthly trends.
+○ Implement a dashboard that displays best-selling items in real time.
+○ Generate reports that restaurant owners can access anytime.
+● Real-Time Inventory Tracking
+○ Stock levels update automatically when items are sold.
+○ Track slow and fast moving items using the EOQ method.
+● Menu Management
+○ Update, add, remove, or archive menu items.
+○ Mark items as unavailable when out of stock.
+● Smart Waste Management & Expiry Date Tracking
+○ Sends alerts to the owner and manager for expiring ingredients, preventing
+spoilage.
+Mobile Application
+Employee Module
+Designed for staff members to assist them in handling orders, payments, and food preparation in
+a timely manner.
+● Login
+○ A login module for employees.
+● Order Menu
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 14
+○ An ordering module for baristas and servers to send orders directly to the kitchen
+and cashier, improving communication and reducing manual errors.
+● Point of Sale System
+○ Faster transactions, better sales reports, and automatic stock updates.
+● Kitchen Display System (KDS)
+○ Orders will appear on a screen in the kitchen to avoid mix-ups.
+● Sales reports
+○ Print sales reports for daily, weekly, monthly and annual operations
+○ Create a pdf or excel files for sales reports
+● Payment Module
+○ Enables secure processing of payments, including cash and digital methods, with
+automatic syncing to sales reports.
+○ Mode of payments (Cash, GCash, Online Banking, Credit Cards).
+Delimitation
+While RestoTrack offers extensive features, the study has the following limitations:
+● The system will be customized for Hapag sa Marikina and may require modifications for
+other businesses.
+● Does not include customer-facing applications for placing orders (e.g., mobile app for
+customers).
+● Limited to restaurant operations and does not extend to supply chain management beyond
+inventory tracking.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 15
+● Requires internet connectivity for full functionality, though offline mode will support
+basic transactions.
+● B-Tree Indexing will be used primarily for sales and inventory data, and other indexing
+methods will not be explored in-depth.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 16
+CHAPTER 2
+Theoretical Framework
+This chapter addresses the literature, which includes research and publications that offer
+current answers to particular issues, useful information about the subject, and support for the
+study's advancement. In addition, it provides the system architecture, definitions of words, and
+the conceptual framework using input, process, and output. Additionally, it was used to give a
+comprehensive overview of the project.
+Review of Related Literature and Studies
+In this section, the proponents compiled several literature reviews that are relevant to the
+study to identify the trends, gaps, and patterns between the literatures.
+Trends in Inventory Management System
+This work intends to provide Inventory Management Systems (IMS) that fit company
+inventory data and may offer improved management and handling of product stock, client orders,
+customer service, and order delivery. The intended user is the owner and staff, a small and
+medium-sized retail store member, of which manual inventory control still prevails in Malaysia.
+IMS notes client orders and tracks anticipated arrival of product stocks for reserve for the shop
+inventory. The developer of this project employs PHP for backend system development and
+HTML, CSS, JavaScript for front-end system development. This study also includes the Agile
+software method stressing the iterative development process. The developer has completely
+constructed the inventory management system, although there are still limits and future
+improvements that might be made to the system. CSS, HTML, Inventory Management Systems
+(IMS), JavaScript, PHP, Small and Medium Enterprise (SME). Keywords One of the key
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 17
+elements of the supply chains in retail establishments is inventory control. The store must update
+the stock coming in or leaving every day or every week. Most of the retail stores have at least a
+warehouse to keep their goods. Retail businesses offer delivery services via customer orders for
+goods from warehouse inventory to keep customer satisfaction even in cases when the shop runs
+without the product. An inventory control system helps a company monitor and manage its
+business income and product inventory, enabling it to handle both. Simultaneously, it is also
+necessary to ascertain the appropriate product quantity to replenish based on consumer and
+market demand, therefore minimizing corporate loss of overstocking. Without a proper inventory
+control system inside a company, many businesses risk particularly for retail stores such as
+out-of-stock and product that is not sold due to market demand which will create dissatisfaction
+to customer and business lost. Moreover, inventory management in an organization is done
+manually, like in certain companies presently and in the past, while updating and verifying
+inventory inventories in an Excel or logbook. These days, several web tools on inventory control
+systems for companies handling stock and product management abound. Many businesses still
+manually handle their merchandise, even with inventory control technologies available on the
+market. This is so because company owners discover the inventory control system is expensive,
+ugly, rigid, or inappropriate for their company. Thus, this work aims to create a less costly web
+application of inventory management systems fit for small to medium companies. Literature
+Review: A Synopsis of System of Inventory Management Most of the present inventory
+management systems available on the market depend on staff members to enter and monitor the
+products utilizing web applications of inventory control systems. These web applications are
+created since many researchers help with time-consuming and ineffective jobs by addressing
+similar issues with their clients when their inventory is managed manually. Designed to
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 18
+lower error on recording product stock into the warehouse inventory and improve the
+process of product in and out of the warehouse inventory, an inventory management system for
+an Indonesian company has been developed. The researcher has added basic functionality in the
+system to reach that, which is the general usability of the view of inventory information data
+containing product detailed report within time range and form template for maintaining the
+inventory product information. From the research conclusion, the author's work of web-based
+inventory management applications is efficient and effective which will minimize certain jobs on
+inventory management (S Pasaribu, 2021). Most managers or owners of businesses, however,
+would want different types of report systems and data that could swiftly assess their inventory
+and product position for better planning. Technology students executed a comparable
+development research project to create an inventory control system for AikTC Server Center.
+Likewise, AikTC's manual tracking and recording of product stock issues shapes the inventory
+management system; the server inventory management is done once a few days or weeks.
+Though there is a slight variation in situation and usage when compared to past research studies,
+the author system requirement calls for varied report information and statistical data generated
+by AIKTC including inventory transaction, purchase, issue, and maintenance report (Aamir
+Khan, Aasif Ansari, MD Ghalib, 2019).
+Trends in Point of Sale's Transaction Data
+A Point of Sale (PoS) may be considered a physical tool found in a physical store or point
+of sale (PoS) in an online retailer. With new capabilities allowing retailers to track price accuracy
+and to record promotional data, control inventory and buying behavior, the software of the PoS
+devices is becoming more complicated (Hayes, 2023). Trade analysis, data analysis and
+representation, data management, stock management, labor management, Customer Relationship
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 19
+Management (CRM), execution of a loyalty program, food distribution feature, contact less
+ordering and payment (StoreHub, 2023). Modern PoS may be made of some or all of these
+functionalities. In inventory control, planning is a dynamic and complicated process including
+the delicate balance of supply and demand, careful handling of stock level in IM, and
+optimization of order fulfillment in SCM. One of the main challenges inventory planners have to
+contend with is how to forecast demand accurately and determine optimal inventory levels for
+their product assortments. However, datieremente (or possibly consequentially), due to Big Data
+Analytics (BDA) becoming more available, inventory planners now have an extremely powerful
+tool/web at their disposal, allowing them to easily choose how much stock to hold and
+how much demand should be expected/required (Conjura in 2023). Big Data Analytics (BDA
+has become more important in the supply chains in recent years. This growth is due to
+the emergence of cloud computing technology, allowing companies to gather, transmit,among
+their trading partners, store and effectively evaluate vast volumes of data. Furthermore, this
+technology lets these supply chain partners share data and information in real time. Moreover,
+BDA can be used in value-added SCM supply chains for terms of process development. These
+possible advantages also include the improvement and operationalization of processes, the cost
+reduction, and the increase of supply chain environment decision making (Lee & Mangalaraj,
+2022). with borders of nations within the ASEAN breaking down.The spread of membership
+resulting from the region where a point of sale (PoS) system appropriate with the regional QR
+code payment method results in a gap. As a result, ASEAN works towards achieving the
+following common QR code across Cambodia (KHQR), Indonesia (QRIS), Lao PDR (Lao QR),
+Malaysia (DuitNow), the Philippines (QR Ph), Singapore (PayNow), Thailand (PromptPay), and
+Vietnam (VietQR) where transactional data for Point of Sale activities becomes more resilient
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 20
+and made more uniformed. The process of converging bilateral schemes into a common
+multilateral platform is being insisted upon and started under the Nexus Project's aauspices under
+the Bank for International Settlements (BIS), as a necessary initial step in the realization of a
+wide ASEAN QR goal. Purchase completed: consumer related data and environmental data such
+as geolocation; consumer related data and transactional data; which includes item transaction,
+item quantity purchased, and item amount spent- consumer related data and environmental data.
+This wealth of data provide the merchant to access invaluable insights out of the big data
+universe – insides which can be translated back to the merchant’s inventory management to
+optimize it efficiently, and as a result: avoid the bad traction of over-stock, and on the same
+time- predict with “deadly” accuracy on the consumer behavior and buying patterns. These
+prediction capabilities, enabled through the use of the large dataset, are valuable for improved
+decision making in MSME business sector (Sukha, 2023). Thus, the objective of this study is to
+assess the extent to which retailers are cognizant of the innovation and benefits associated with
+adopting Inventory Management (IM) component into their Point of Sale (PoS) system. This
+invention could also simplify the daily routine.
+The paper investigates issues and solutions of inventory management in e-commerce as
+well as traditional industry. The work aims to implement the inventory management system that
+can store and update data efficiently about dealers, suppliers, manufactured product and
+availability of raw materials and to handle and navigate the data in a user interface easily
+navigable for nontechnical people. This study is focused on the creation of a MongoDB database
+for Java in NetBeans as front-end for backend data storage. MongoDB is chosen here because it
+can handle unstructured data, which is typical for inventory control chores. The system can also
+keep an eye on numerous blocks, including departments, inventory, raw supplies, businesses and
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 21
+staff. The authors of [11] offer a GUI to the NetBeans-developed system as Builder. The
+interface It's developed to be intuitive, user are able to perform operations such as adding,
+updating, deleting record without being a tech savvy user. The proposed system resolves
+effectively the inconsistency problem, uneven order sizes and inaccurate stock control. They
+bring out the robust customer service offered by the system, which is only possible due to proper
+management of data in time. This work recommends further research areas like integrating the
+system with other enterprise resource planning (ERP systems) and a study on the employment of
+artificial intelligence (AI) in (e) Developed inventory management systems using application.
+Trends in Existing Inventory Management Systems
+This work helps to solve the problem of efficient systems of management gifts and
+inventory for small and medium-‐sized businesses (SMBs). The researchers point out the
+shortcoming of conventional inventory management techniques including manual recording and
+spreadsheet-based systems, being error and time-inefficiency prone. The authors’ main aim of
+this study is to design a mobile application system for inventory management to the small and
+middle enterprises (SMEs) which could be user-friendly, accessible and providing real-time
+information on the status of the inventory which will allow the SMEs to have better control over
+their current inventory level. The proposed mobile application was developed using a structured
+analysis and design methodology by the authors. The system was modularised to cater for
+different user requirements. The application was developed in Android Studio (Front-end) and
+managed the database in Firebase (Back-end). The combination presented a powerful and
+scalable approach to managing inventory data. Yet, the paper could have profited from some
+more in-depth reflections on potential problems and limitations when implementing such a
+system. analyzedPotential can be The limitation of the work is that the research does not consider
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 22
+the problem such as data security, and do not compare experiments with other inventory
+management systems. 1] which proposedDevelopment of Web Based Platform for
+Automating Inventory Management of Small 56 Medium Enterprise, The study intends to solve
+the inventory management problems for small and medium-sized businesses (SMEs) by means
+of manual approaches. Like spreadsheets, traditional inventory control is time-consuming, prone
+to mistakes, and essentially useless, the writers note. Usually, these strategies have negative
+effects on a company's performance and lead to erroneous information shared inside, neglected
+and disregarded policies. The major goal of the project was to create a web-based application
+that would automate the inventory control for SMEs (who want to have a system that supports its
+business processes, mistakes' reduction and productivity enhancement). The proposed system
+was designed by the authors using a methodical approach combining design and analysis. Their
+separation of the system allowed it to remain capable of reusing depending on different
+consumer needs. Since the system was developed based on MySQL database that is strong and
+expandable processing inventory data, contextualized a web-based system for automation of
+inventory management system would bring much benefi t to SMEs. The system resolves the
+shortcoming of manually operated inventory management approach, thus offering an efficient,
+accurate and user-friendly solution. Adoption of similar computerized systems is advised on
+to enhance with better service, to minimize undue stress and for the purpose of maintaining the
+various inventories up-to-date. In comparison, such work is dumb, and it is constructed as an
+independent system.
+Trends in Research Indexing Algorithms
+In this article, we study the indexing algorithms employed in advanced search engines,
+such as the B-tree, reverse indexing, and data (proper) indexing techniques. With more and more
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 23
+electronic information, it is harder and harder to find the files you need quickly and really
+quickly find the one that you wanted. Attempt at solution Software development companies
+have offered products to address it. The article discusses proper indexing techniques, reverse
+indexing, and B-tree data indexing methods. Some of the index types that the PostgreSQL
+database system supports are B-tree, GIN, GIST, and HASH indexes. Only three of these -GIN,
+GIST, and B-tree- are actually used. A B-tree structure is employed by modern database
+management systems to maintain indexes and enhance searches performance.
+KEYWORDS: B-tree, GIN (indeksowanie dołączające – reverse indexing), GIST (indeksowanie
+właściwe – data (proper) indexing), HASH, indeksowanie, Trigger, PostgreSQL.
+Trends in Digital Transformation of the Retail Point of Sale in the Artificial Intelligence Era.
+Digitalisation in the retail sector has transformed how the point of sale (POS) works. In
+this age of artificial intelligence (AI), POS systems are super smart and advanced which in turn
+are helping retailers work efficiently and enhance customer service as well as a drive in sales.
+ML-driven POS machines are capable to treat all customer data and provide data-driven
+recommendations about products/ services. A POS system driven by AI could analyze
+customer purchase history and then suggest relevant items in which the customer may be
+interested. One other aspect of digital transformation in retailing is the emergence of POS
+systems which are now interconnected to other technologies like the mobile and the internet of
+things (IoT) and augmented reality technology (ART) solutions. This has empowered merchants
+to design an effective shopping experience and offer access to a greater selection of products and
+services. The digital transformation of the retail store has redefined the way point-of-sale (POS)
+systems function. Advanced POS systems and AI With the advent of artificial intelligence (AI),
+POS systems are becoming smarter and more advanced, making it easier for retailers to enhance
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 24
+efficiency, customer satisfaction, and sales themselves. Artificial intelligence-based POS
+systems can apply ML models to customer data, providing valuable recommendations on
+products and services. It can listen to a customer's sales history and recommend other cross sells
+that customer might be interested in. One other development of the digital transformation in
+retail was the transformation of point of sale (POS) system inside retail stores to reduce the
+siloed (difficult for different digital technologies to interact with) nature of POS, into the central
+component of the retail systems ecosystem integrating not just payments, but other technologies
+like mobile, internet of things (IoT) and augmented reality technology (ART). This has allowed
+retailers to deliver convenient shopping and offer access to more products and services.
+Trends in How Smart Waste Management System Works.
+Retail companies are undergoing digital transformation and this has prompted substantial
+modifications in the operation of point-of-sale (POS) systems. With the age of arificial
+intelligence (AI) upon us, the intelligence level and functionalities of a POS system are growing
+smarter that enable retailers to enhance efficiency, enhance customer satisfaction, and stimulate
+sales. AI-based POS systems leverage advanced machine learning technology to interpret
+customer data and generate intelligent suggestions for products and services. A POS system
+driven by artificial intelligence could potentially be used to look up a customer’s purchase
+history and recommend other items the customer may be interested in. This digital
+transformation in retail sector has been also about the integration of the POS systems with other
+technologies such as mo-bile devices, internet of things (IoT) or conventional money and AR
+technology [7]. This, in turn, has permitted retailers to construct an efficient shopping experience
+(e.g., in terms of shopping costs) and offer richer product and service offers. Four such industrial
+revolutions have come since the first one in 1760, and each was a step forward in enhancing
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 25
+lifestyle and mankind thanks to better manufacturing processes. In the first revolution, steam
+engines replaced much of human work, making things more efficient and cheaper. The second
+revolution brought with it mass production assembly lines and electrification that
+made high-quality goods cheaper to produce. A third revolution followed, the one in which
+electronics, telecommunication and computers emerged and with them, internet shopping and
+globalisation. Fourth revolution, also named as industry 4.0, aimed to link physical objects to
+individuals and influence the retail field on a large scale (Reagan & Singh, 2020). Retails 1.0
+and 2.0 gave rise to department stores and shopping malls, respectively, which offered
+consumers access to inexpensive goods. As a result of the rise of online shopping, which is
+known as Retail 3.0, consumers were able to buy whatever they wanted without going
+anywhere, significantly changing purchase behaviours. The advent of Retail 4.0 technology
+including such technological hit-ter as AI, IoT, Cloud Computing, Big Data Analytics (BDA),
+Augmented Real-ity (AR), have made it possible to further improve and simplify the shopping
+experience for consumers. AI can automate jobs urging an employee and IoT can operate home
+and office applications using mobile applications. Retail 4.0 innovations have also been used to
+enhance the sustainability of agri-food retailing. 202 Retail Point of Sale Digital Transformation
+Through Kiosk Solutions Retailers were compelled to introduce self-service kiosks as an
+economical means to minimize in-person interaction and safeguard their customers from
+COVID-19 (Ernst & Young, 2020). Self-service kiosks allow users to self serve with certain
+services, which makes the consumers more satisfied and have more control over their buying.
+Retailers are finding that Retail 4.0 technologies enhance their business performance
+and customer experience, in turn helping them to stay ahead in the marketplace. They are now
+able to transition effortlessly between channels and enjoy an integrated, consistent, and uniform
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 26
+service across all channels. Recommendations can be tailored to individual consumers in order to
+be more satisfying, increase customer loyalty as well as sales, and enhance profitability (Har et
+al., 2022). In short, Retail 4.0 indicates a radical change in the retail sector, which is fostered by
+the integration of digital technologies, e.g., IoT, AI, BDA, cloud computing, and social media.
+Retailers can make customer experience more personal and convenient and at the same time,
+enhance efficiency and cut costs, by using these technologies. In an evolving retail industry,
+Retail 4.0 may prove to be increasingly important as the future of retail, new technology and
+developments will continue to shape growth and change. AI means that retailers can now run
+unmanned stores which cuts labor costs, BDA and cloud computing can analyze user data to
+predict preference and provide personalized services. These technologies also add flexibility
+and increase the efficiency of the distribution value chain. The internet of things is happening
+and there is so much data streaming in that needs to be used to make decisions. There is a
+critical need for progress in sensor technology for data processing, sharing, and collection
+(Lueth, 2020). Location-Based Marketing Virtual assistants like Alexa and Google Assistant can
+tell users about nearby retail locations that sell a product they are interested in as a result of
+location data (Cate, 2019). Smart beacons, for example, can sense pedestrians walking by a store
+and send the people electronic messages on their phones about deals that might entice them to
+stop in and shop. Internet of things (IoT) will massively impact on the way data acquisition and
+customer relationship management (CRM) systems develop in the future (Goldberg, 2021).
+Nor does it support forecasting, replenishment, allocation, order management, and logistics
+operations. 3.Using self-service kiosks at concession stands and in restaurants has increased
+average order size by 20% and improved the method of inventory management. RFID
+technology allows automatic object tracking and object identification, which results in minimal
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 27
+out-of-stock and out-of-shell occurrences and enhanced inventory turnover (Har et al., 2022).
+The “intelligence” of the machine is its ability to “understand” and “learn” from the mining of
+data, resulting in a form of automation that is smart and only requires human intervention
+sporadically. AI-based automation complements and amplifies human skill, reduces human error
+and paves the way for operational excellence, customer experience and service levels
+enhancement in retail (Kalyani & Pawar, n.d.). The most recent types of vending machine, called
+smart vending machines (VMs), which include voice and face recognition, apply deep learning
+and machine learning methods to induce more users. The VMs are based on AI in figuring out
+customer preferences and behaviours to display a visual interface with a focus offers
+(Zimmermann et al., 2022). In China, JD. com Corporation Unique AI vend-ing machines for
+fresh produce available 24 hours. This no-contact buying is valued by consumers in the
+middle of the COVID-19 outbreak. The integration of AI in retail can save rent, labor cost, and
+other costs by purchasing fruit from wholesale markets, helping local farmers and enhancing the
+overall agri-food supply chain. For instance, Alibaba’s Cainiao network employs an AI-backed
+smart inventory platform that unites the on-and off-line retailing universe (Lin, 2020). ART
+amplifies sensory experiences, and mostly every other business use AR to enhance the
+experience the customer is going to get. The Maker Experience by Nike deploys AR to empower
+customers with the design a pair of shoes they can then buy in-store, (O’Brien, 2017). Shoppers
+will be able to customise their Nike Presto X shoes and visualize through 203 Digital
+Transformation of the Retail Point of Sale AR, object tracking, and projection systems. L’Oréal
+has introduced a Shopee enabled, AR-powered tool that can help to match their desired lipstick
+shade with the visualisation of their perfect lip shade based on their unique beauty need to better
+their online shopping journey (Lim, 2019). Cloud computing is where computing power, data
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 28
+storage resources, software, and other information technology resources are provided to the user
+as a service over the internet via a platform. Cloud Computing Retailers will need to invest in
+cloud services to store, analyze and distribute the unprecedented volume of data that is created
+by Retail 4.0. Cloud Computing is cheap, easy and perceived as the most cost-effective way
+monitor the chain of supply, end-to-end. For instance, Sayurbox, Indonesia’s traditional
+farmer-to-urban consumer e-commerce platform, has used cloud service provider AWS to handle
+their supply chain from end-to-end, (Amazon Web Service, 2021). This allowed them to capture
+demand, match it with supply sources, process a 300% daily growth in order volume, execute 24
+hour product delivery, save customers 30% on production costs, and help farmers secure 20%
+more revenue while lowering overhead via managed services (Har et al., 2022).
+Trends in Data Analytics
+Through abundant data sources, research is being increasingly brought forward to the
+field of data analytics, which has grown considerably in scale. The evolution of analytics is the
+subject of this paper. Those conundrums of large datasets and data engineering, along with the
+whys of the technologies that exist to process such large amounts of data, are the focus of this
+first half of the article. It will be a good book for academics who desire to employ data analytics
+to derive insights from their data. Analysis is an adventure in understanding something;
+data analytics is the journey to understand the data you already have. At its heart, this field
+deals with data management which is accessible at any given time that includes the collection
+and storage of such data sources along with methodology, tools, and strategies for assessing the
+data. Data analytics is seeking connections, meaning, and patterns extracted through data
+analysis and inference. Such evidence-based advices, not only orient companies in
+decision-making, but also contribute with the generation of predictions and the improvement of
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 29
+efficiency (Marchena Sekli & De La Vega, 2021). Within the broad areas of socio-economic and
+politics, management of forced migration, reliefs and rehabilitation works, climate change
+mitigation, food waste reduction, effectiveness of Aid programs and the like activities, data
+sciences are finding itself more and more inseparable from many of these philanthropic as well
+as political Spectrum (Naikwadi et al., 2021). Entities and businesses will need to consider
+adding Web 3.0 and the metaverse to their data analysis plans as the newness and popularity of
+this virtual space grow. The kind of best insights and decision-making power is also expected to
+come with the next wave of data analytics, through synergy of what people can do and what
+artificial intelligence can do working in tandem, and building on each other. This will enable
+enterprises to track their most valuable performance metrics and deliver market efficiencies.
+Trends in Applications on Mobile Devices
+The prevalence of mobile devices has made demand for literary translation in higher
+education and individual learning, even higher. But today’s translation apps flinch at being asked
+so much of the time to do the same thing, and the data sync/ offline capability is terrible. The
+one of the big problem is to assure the quality of translation and fast data synchronization,
+particularly in uncertain or broken network environment. The prevailing works focus on offline
+mode local storage and updating methods. However effectiveness in translation can be impaired
+by limited storage capacity and update procedures. Data-synchronization techniques similarly
+have predominantly been explored under more benign network conditions with few treatments
+of poor network conditions or unreliable network connectivity. This study focuses on the off-line
+operation and data synchronization technologies in literature translation programs for portable
+devices to address this issue. The research results can lead to new storage and update methods in
+the offline mode, bring about higher data synchronization efficiency and robustness, and
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 30
+optimize the utility and user experience of translation tools. With the popularity of mobile
+terminal and the rapid development of technology, the translation apps of literature are
+becoming increasingly important for the purpose of academic study and daily study [1–3].
+However, these applications face various challenges in data synchronization and offline
+operation [4–6]. When used in mobile scenarios, users may encounter intermittent or
+discon-nected network conditions and hence they rely more heavily on the oine functionality of
+translation apps [7–11]. Quality of translation also helps facilitate.
+Conceptual Framework
+Conceptual Framework consists of the Input, Process, Output and the Evaluation process
+of the project. This project will use Agile Methodology as the chosen software development
+approach. For the evaluation the project will use ISO 9126 as for the evaluation of software
+quality which follows the sub characteristics: Functionality, Reliability, Usability, Efficiency,
+Maintainability, and Portability. (See figure 1)
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 31
+Figure 1
+Input-Process-Output
+System Architecture
+Figure 2 shows the system architecture, which presents the design and developments
+aspects of RestoTrack Web and Mobile-Based POS and Inventory Management System.
+Architecture Three tiers are defined under the architecture: Presentation Tier Application Logic
+Tier Data Tier The Presentation Tier encompasses the web and mobile apps for administrators,
+baristas, cashiers, and kitchen workers. The Application Logic Tier is responsible for basic
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 32
+operations such as user handling, real-time inventory management, sales statistics collection and
+order fulfillment. Data Tier manages storage and retrieval of all essential data, including
+employee records, menu items, sales transactions, and inventory logs. This layered approach
+provides for an integrated communication, optimal runtime behaviour, and
+secure datamanagement, within individual modules of the architecture.system.
+Figure 2
+System Architecture
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 33
+Presentation Tier
+Figure shows a 3-tier system architecture for the inventory and POS, which would
+partition concerns into different layers. Users can interact directly through the front end,
+consisting of Presentation Tier, designed at the top. It has screens like cashier login, POS
+dashboard, inventory dashboard, admin dashboard, and manager dashboard. Data comes in from
+users to this tier, and comes out – in the form of reciepts and reports. Underlying all of this is the
+Logic Tier, which is the brains behind the system, containing packages for managing different
+aspects like managers, admin, inventory and POS transactions.
+This tier gets requests from the Presentation Tier and communicates with the data
+storage below. 3- Data Tier This tier is responsible for storing the data of the system,
+including databases for employee data, stock data, sales transactions and some security features
+such as access control. External inputs are users and an admin/manager logging into the system,
+as well as an internet connection to potentially enable online functionalities and a local database
+which could be used e.g. for backup or specific data storage requirements. This layered design
+provides for the organization, the scalability, the security, and the flexibility of the POS system.
+Application Logic Tier
+The steadiness-layer The Application Logic Tier is a main processing layer for the
+RestoTrack system where all the business logic and communication between the user interface
+and the database is structured in. These are basic modules that are programmed solely for
+restaurant businesses. With the User Management Module, managers can create, edit, deactivate,
+or delete individual employee accounts to maintain accurate employee records. The
+Sales Reporting Module: This provides instant sales data and performance reports, so you can
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 34
+make informed and accurate decisions. 2.14 Stock Management: The Inventory Management
+Module The Stock Tracking Module automatically checks the balance of inventory, the inventory
+update for each sale, as well as how fast and how slow an item moves using the EOQ formula.
+Menu Management Module allows an administrator to update, to archive, and to mark items as
+unavailable when there is no stock available. The Ordering Module makes order taking easy by
+enabling bartenders and servers to easily send messages to the kitchen and cashiers with
+minimal mistakes. Cashier POS Module processes transactions and interacts with inventory
+updates, also quicker. Finally, with the Kitchen Display System (KDS), incoming orders are
+shown to kitchen staff in real time, guaranteeing the accuracy and efficiency. Taken together,
+these modules allow restaurants to run smoothly from the front counter to the kitchen.
+Data Tier
+The Data Tier forms the basis of the RestoTrack System and looks after the billing
+information and data that is at the heart of any restaurant operation. Employee Database - for
+storing employee information such as personal details, positions, and employment history,
+resulting in all innkeeper-related data to be well-maintained. The Sales Database records all
+information from sales processing, including time of sale, items sold and payment information,
+providing full and immediate reporting capabilities. Inventory Database monitors stock level,
+ingredient consumption and expiry dates, all of which contribute to the efficient management of
+inventory plus reductions in waste. The Menu Database encompasses all menu item information
+such as availability, pricing and categorization. For security and privacy concerns, the Security
+Measure including editable data storage, role base access control, and secure login mechanism
+are included in this tier. Along with these features, these elements deliver the integrity,
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 35
+accessibility and security of restaurant key data, providing a solid and effective system for both
+administrators and staff.
+Definition of Terms
+POS System A location, or system, in which retail transactions are
+made. A POS or Point of Sale System is generally a
+combination of software and hardware that facilitates sales
+processing, inventory control, and management reporting.
+Inventory System A computerised or automatic system that tracks the stock
+levels, orders, sales and deliveries of a business. It
+organizes proper handling of items as well as assisting in
+restock choices and making the best use of resource
+management.
+Database A structured set of data that is stored and
+accessed electronically, typically computer-based.
+MySQL MYSQL full form is My Structured Query Language.
+It is a widely used open-source RDBMS intended to store
+and retrieve data.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 36
+Visual Studio Code A satisfactory code-editor experience, that integrates
+development operations like debugging, task running, and
+version control. The idea behind it is to offer exactly what
+a developer needs at the time of the code-build-debug
+cycle with no unnecessary overhead.
+Web-Based Application A computer application that runs in a reader's browser.
+These are Web-based and can be used through any
+wireless communications device that has a complex
+Contains and runs on a client-server structure, which
+enables the app to be executed on a network.
+Mobile Application A software program that is designed to run on
+smartphones, tablets, and other mobile devices application
+provides dedicated functionality to users.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 37
+CHAPTER 3
+Research Methodology
+RestoTrack is a web application that helps restaurants effectively manage their
+point-of-sale (POS) and inventory management. The solution guarantees quick data retrieval,
+efficient stock management, and smooth transaction processing for restaurant owners and
+employees by leveraging indexing techniques. The method that Restotrack used in the project is
+the Agile Methodology.
+Product Design
+This study aims to create RestoTrack, a web and mobile POS and Inventory
+Management System made for Hapag sa Marikina, to help improve restaurant operations by
+integrating sales and inventory process, and to improve the service flow of the restaurant.
+The proposers will evaluate existing constraints on operations, particularly in manual inventory,
+order processing and legacy POS systems, to collect necessary input for system design and
+development. New ideas will be formulated to overcome inefficiencies, supported by specific
+development targets and streamlined processes. Data will be gathered utilizing interviews, prior
+research and publications to inform the design and features of the system. The scope of and
+limitations on the project will be explicitly specified to ensure that the work remains feasible and
+focused. The system will be created by Visual Studio Code as the bigger IDE, HTML, CSS
+(Bootstrap framework), JavaScript and PHP (Laravel framework) for web functionalities and
+MySQL for database management. We will be prototyping the interface and UI/UX design with
+Figma. It will have Real Time Inventory, Sales Analytics, Kitchen Display System(KDS), Waste
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 38
+& Expiry Tracking Modules. The app will also have a payment portal for easy check out. The
+various modules will be fully integrated and will together create a seamless operating restaurant
+and enhanced business decision making.
+Design Discussion
+Figure 3, Design 1 retains the light, uncluttered aesthetic used in earlier mock‑ups, but the
+login form has been repositioned to the center of the screen. This centered layout enhances
+usability: it immediately highlights the single task‑critical action—signing in—so users do not
+have to scan the page to find it. The clear focal point reduces cognitive load, shortens decision
+time, and ultimately provides a smoother, more intuitive experience for busy staff members who
+just want to log in and begin working.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 39
+Figure 3
+Design 1 - Web Platform Style 1
+Figure 4, design 2 includes a split-screen layout with a green overlay that on brand but
+clean and professional. Login form is kept on the right so that the restaurant background image
+can act as an ambient visual queue giving a rush of context and familiarity to the users. The
+matching green colors tones, rounded input fields, and a light and clean font makes it a pleasure
+to use, this template sure anyone using it will have a great experience.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 40
+Figure 4
+Design 2 - Web Platform Style 2
+Presented in modern split layout with the form against the left and eye-catching image of
+the Hapag Sa Marikina restaurant at the right side. Provides a number of options for signing in
+with a big "Sign in with Google" button improving user experience. The soft gray input fields,
+clean type, and dark green login button give the page a polished and professional feel, while also
+aligning with the brand’s look and feel.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 41
+Figure 5
+Design 3 - Web Platform Style 3
+Design Trade-Offs
+Table 1 presents constraints measured using the developer tools in Google Chrome.
+Design trade-offs help assess a design #3’s effectiveness and suitability for specific purposes,
+with table metrics evaluating the design’s quality. The table measures loading time, physical
+memory usage, and response time across three web platforms, each with similar functionality but
+distinct user interface designs.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 42
+Table 1
+Constraints Identified
+Design Constraints
+Loading Process Memory Usage Response Time
+Design 1 4,198 ms 3,241 kb 6,831 ms
+Design 2 5,628 ms 5,589 kb 7,391 ms
+Design 3 3,124 ms 1,122 kb 5,691 ms
+Developmental Research
+Several revisions were made through the application development in this study to
+improve the performance and usability. The development was split into several iterations:
+analysis, planning, design, implementation, testing, release and follow-up. Throughout the
+process, the close relationship among advocates helped ensure that any needed changes were
+successfully made.
+Where:
+%difference for MIN = (Higher Value - Lower Value) / Higher Value
+Equation 1. Percentage Difference
+The method that the proponents will be using in calculating the percentage difference
+between each design based on each criterion is presented in Equation 1.
+Subordinate Rank = GR -[(%difference) * 10)]
+Equation 2. Subordinate Rank
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 43
+The method for calculating the subordinate ranks of the three designs is presented in
+Equation 2.
+Figure 6 shows the performance ranking scale for the representation of the contrast
+between the two designs.
+Figure 6
+Performance Ranking Scale
+Trade-Off 1
+Loading comparison between the three designs is given in Table 2. Design 1 has
+the fastest loading rate and gets the dominant rank.
+Table 2
+Loading Process
+Designs Loading Process
+Designs 1 6,831 ms
+Designs 2 7,391 ms
+Designs 3 5,691 ms
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 44
+Computation of Ranking in Loading Process between Design 3 and Design 1:
+%difference for MIN = (6,831 - 5,691) / 6,831
+%difference = 0.17 or 17%
+Subordinate Rank = 10 - (0.17 * 10)
+Subordinate Rank = 8.3 or 8
+Figure 7 illustrates that Design 3, holding the governing rank, is plotted against Design 1
+with a value of 8.3 or 8. The loading process difference between Designs 3 and 1 is 17%,
+indicating that Design 3 has a faster response time than Design 2.
+Figure 7
+Performance Ranking: Design 3 and Design 2
+Computation of Ranking in Loading Process between Design 3 and Design 2:
+%difference for MIN = (7391-5691) / 7391
+%difference = 0.23 or 23%
+Subordinate Rank = 10 - (0.23 * 10)
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 45
+Subordinate Rank = 7.7or 8
+Figure 8 illustrates that Design 1 is plotted against Design 3 with a value of 0.7 or 1. The
+loading process difference between Designs 1 and 3 is 93%, indicating that Design 1 has a faster
+response time than Design 3.
+Figure 8
+Performance Ranking: Design 3 and Design 2
+Trade-Off 2
+Table 3 compares the three designs based on the amount of memory they use per unit of
+file size. Design 3 is considered the governing rank, as it uses the least amount of memory.
+Table 3
+Memory Usage
+Designs Memory Usage
+Designs 1 3,241 kb
+Designs 2 5,589 kb
+Designs 3 1,122 kb
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 46
+Computation of Ranking in Memory Usage between Design 3 and Design 1:
+%difference for MIN = (3241 - 1122) / 3241
+%difference = 0.65 or 65%
+Subordinate Rank = 10 - (0.65 * 10)
+Subordinate Rank = 3.5 or 4
+Figure 9 presents a comparison between Design 3 and Design 1, with Design 3 holding
+the governing rank, resulting in an outcome value of 4. The result indicates that Design 3 uses
+65% less memory than Design 3.
+Figure 9
+Performance Ranking: Design 3 and Design 1
+Computation of Ranking in Memory Usage between Design 3 and Design 1:
+%difference for MIN = (5,589 - 1,122) / 5,589
+%difference = 0.8 or 80%
+Subordinate Rank = GR -[(%difference) * 10)]
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 47
+Subordinate Rank = 2
+Figure 10 presents a comparison between Design 3 and Design 2, with Design 3 holding
+the governing rank, resulting in an outcome value of 2. The result indicates that Design 3 uses
+80% less memory than Design 2.
+Figure 10
+Performance Ranking: Design 3 and Design 2
+Trade-Off 3
+Table 4 compares the three designs in terms of response time. Design 3, with the lowest
+execution time is considered the governing rank.
+Table 4
+Response Time
+Designs Response Time
+Designs 1 6,831 ms
+Designs 2 7,391 ms
+Designs 3 5,691 ms
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 48
+Computation of Ranking in Response Time between Design 3 and Design 1:
+%difference for MIN = (6,831- 5,691) / 6,831
+%difference = 0.17 or 17%
+Subordinate Rank = GR -[(%difference) * 10)]
+Subordinate Rank = 8.3 or 8
+Figure 11 illustrates that Design 3, holding the governing rank, is plotted against Design
+21 with a value of 2. The loading process difference between Designs 3 and 2 is 80%, indicating
+that Design 3 has a faster response time than Design 2.
+Figure 11
+Performance Ranking: Design 3 and Design 2
+Computation of Ranking in Response Time between Design 3 and Design 2:
+%difference for MIN = (7,391- 5,691) / 7,391
+%difference = 0.23 or 23%
+Subordinate Rank = 10 - (0.23 * 10)
+Subordinate Rank = 7.7 or 8
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 49
+Figure 12 illustrates that Design 3, holding the governing rank, is plotted against Design
+2 with a value of 8. The loading process difference between Designs 3 and 2 is 23%, indicating
+that Design 3 has a faster response time than Design 2.
+Figure 12
+Performance Ranking: Design 3 and Design 2
+Criterion’s Performance
+The overall ranking of each criterion was calculated after evaluating the three designs
+under various constraints to determine which design is considered the best and most suitable for
+the application.
+Table 5 shows the overall ranks for each criterion, used to determine the most suitable
+design for the application. The criteria rank is determined by the level of concern for each factor.
+The Loading Process is assigned the highest score of ten, as it is the most critical in determining
+how quickly the system processes data. Response Time is given a value of 9, as it reflects how
+quickly the system responds to the user. Finally, Memory Usage is assigned a value of 8, as it is
+influenced by the system's memory consumption on the user's device.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 50
+Table 5
+Overall Ranking of each Criterion
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 10 8 7 10
+Memory Usage 8 4 2 10
+Response Time 9 8 7 10
+182 145 250
+To summarize, Design 3 achieved the highest scores in all categories—scoring a perfect
+10 in Loading Process, Memory Usage, and Response Time—making it the most efficient
+overall. Design 1 performed well in Loading Process and Response Time but showed moderate
+performance in Memory Usage. Design 2 had decent scores but lagged behind in overall
+performance. With the highest total score of 250, Design 3 outperformed the others and was
+selected as the superior design.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 51
+Influence of Design Trade-Offs in Final Design
+Design Trade-Offs was considered as appropriate to this research work as it provides a
+quantitative evaluation of the performance and appropriateness of proposed designs. This
+allowed the designers to choose a plan that satisfies all constraints and outputs to optimize for
+whatever fun they wanted to if it meets all study objective requirement. The load process, the
+memory usage, and the response time were used to differentiate each of the three developer
+designs.
+● Criterion 1: Loading Process
+First, the load time, loading often means how fast the query simulations are
+performed. Therefore, the design choice will influence how accurate and successful plan
+will be.
+● Criterion 2: Memory Usage
+Memory consumption is the size of the dataset to work on, an important constrain
+as it influences the.
+the assessment of the performance efficiency indicators.
+● Criterion 3: Response Time
+Response time is the response to the time a query is sent, and when the terminal
+receives the response. It is an important measure regarding whether an interactive system
+is effective, and non-compliance may affect system recovery.
+Sensitivity Analysis
+Sensitivity analysis is an approach to revenue modelling that examines the
+potential effects of fluctuations in input values on targets. It is also referred to as a what-if
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 52
+model or simulation analysis. It's a method to predict what decision the affair can lead to based
+on the factors that are relevant.
+1st Combination for Sensitivity Analysis
+In Table 6, the combination of 10-8-9 was applied to the criterion's importance. Design 1
+received an overall rank of 252, while Design 2 and Design 3 tied with a rank of 179.
+Table 6
+Sensitivity Analysis Using 10-8-9 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 10 8 7 10
+Memory Usage 8 4 2 10
+Response Time 9 8 7 10
+208 171 253
+2nd Combination for Sensitivity Analysis
+In Table 7, the combination of 8-9-10 was applied to the criterion's importance. Design 3
+received an overall rank of 270, while Design 1 ranked 180 and Design 2 ranked 144.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 53
+Table 7
+Sensitivity Analysis Using 8-9-10 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 8 8 7 10
+Memory Usage 9 4 2 10
+Response Time 10 8 7 10
+180 144 270
+3rd Combination for Sensitivity Analysis
+In Table 8, the combination of 8-10-9 was applied to the criterion's importance. Design 3
+received an overall rank of 270, while Design 1 ranked 176 and Design 2 ranked 139.
+Table 8
+Sensitivity Analysis Using 8-10-9 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 8 8 7 10
+Memory Usage 10 4 2 10
+Response Time 9 8 7 10
+176 139 270
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 54
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 55
+4th Combination for Sensitivity Analysis
+In Table 9, the combination of 10-9-8 was applied to the criterion's importance. Design 3
+received an overall rank of 270, while Design 1 ranked 180 and Design 2 ranked 144.
+Table 9
+Sensitivity Analysis Using 10-9-8 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 10 8 7 10
+Memory Usage 9 4 2 10
+Response Time 8 8 7 10
+180 144 270
+5th Combination for Sensitivity Analysis
+In Table 10, the combination of 9-10-8 was applied to the criterion's importance. Design
+3 received an overall rank of 270, while Design 1 ranked 184 and Design 2 ranked 149.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 56
+Table 10
+Sensitivity Analysis Using 9-8-10 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 9 8 7 10
+Memory Usage 8 4 2 10
+Response Time 10 8 7 10
+184 149 270
+6th Combination for Sensitivity Analysis
+In Table 8, the combination of 10-8-9 was applied to the criterion's importance. Design 3
+received an overall rank of 270, while Design 1 ranked 176 and Design 2 ranked 139.
+Table 11
+Sensitivity Analysis Using 9-10-8 Criterion Rank
+Decision
+Criteria
+Criterion’s
+Importance
+Ability to satisfy the criterion (0 to 10)
+Design 1 Design 2 Design 3
+Loading Process 9 8 7 10
+Memory Usage 10 4 2 10
+Response Time 8 8 7 10
+176 139 270
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 57
+Project Development
+InfoWorld (Sacolick, 2022) indicates that Agile emphasises on working software
+and refers to teams being held accountable to deliver complete functionality and applications,
+integration, and other working products that will have value to the system beneficiaries as
+opposed to finished coding. Successful implementation of Agile practices requires to secure
+collaborative procedures among team members in relation to the product being built, specific
+task assignments, and the development workflow. The process starts with a Vision statement that
+captures the problems, opportunities and values of what the project has set out to achieve. This
+vision is a creation that originates from a product owner and is co-created with a cross-functional
+team to help it become real.
+Roles in Agile There are clearly defined roles and responsibilities in Agile Development
+across the team. This approach is specifically poised for success on this project because it is
+equally focused in its nature on intensive pre-design meetings and research; an tantamount
+preliminary step to the success of projects. Moreover, by building continuous testing into the
+Agile dev lifecycle, the risk of future bugs is lowered, increasing the likelihood of project
+success.
+The proponents will used the following throughout the conduct of the project
+development:
+Phase I: Planning
+During the planning process, the proponents planned out the project timeline
+deciding when the project has to be completed and which specific benchmarks must be
+met. All members of the team get their specific tasks due to their skills – this is how the
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 58
+proponents avoid downtime in the project. Explicit goals and aspirations are formulated
+in order to guide the development process and to ensure that the work remains consistent
+with the needs of the project (Figure 13).
+Phase II: Design
+The design phase of the team concentrates on development of a simple to use
+web application that serves the purpose of the organization. Mock-ups of the UI
+are developed with focus on functionality and user friendliness. Design is iterated and
+feedback is polished, with focus to improve user experience and include essential features
+to best support the organization (figure 13).
+Phase III: Development
+During development you will be translating the design into working, code and
+components. This involves installing and configuring the database, building out
+the required back-end and front-end components and ensuring everything works
+together. As the project is at its heart at this stage, the team is investing substantial
+efforts to get the application work properly (refer Figure 13).
+Phase IV: Testing
+At this experimenting stage, the usefulness and usability of the web application
+are adequately evaluated. The proponents tests the software to verify that it meets the
+demand of the business, testing for bugs, glitches, usability and other limitations.
+Feedback from such tests is applied to refine the program and provide successfull
+execution on different deployment environments (Figure 13).
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 59
+Phase V: Implementation
+In the implementation phase, the web and mobile applications are pushed into a
+staging or test environment where they are tested for proper configuration and
+connectivity with all the system parts. The team carries out the last rounds of functional
+validation, simulates how the product will be used in real life, and checks the system’s
+stability before the real release. This stage is about technical readiness, ensuring that the
+application works well and does what is required. Internal feedback is received and used
+to solve any last-minute problem before the System is assumed ready for full
+deployment. (Figure 13).
+Phase VI: Evaluation
+The team assesses the success of the web application in relation to the initial
+project objectives and quality requirements in the evaluation phase. It would include
+soliciting corpora user feedback, assessing system usability, reliability, and system
+functionality, and running performance evaluations. The team uses this data to determine
+success, such as if the application meets user expectations and business objectives. The
+recommendations based on the results are further improvements or future versions of the
+system (Figure 13).
+Phase VII: Launch
+In the launch phase, the web application is deployed to a targeted audience.
+The team is overseeing the coordinated launch so that everything falls into place. This
+phase includes user on-boarding events and support to early users. The launch success is
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 60
+very well tracked, and any short-term post-launch failures are addressed quickly to
+uphold user satisfaction and application stability (Figure 13).
+Figure 13
+Agile Development Process
+Testing and Operating Procedures
+The testing and operating procedures for the POS and Inventory System are conducted in
+a structured manner to ensure the system meets the defined functional and non-functional
+requirements. These procedures are designed to validate system performance, usability, and
+reliability before deployment. The process follows four main stages:
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 61
+● Formulate a Test Plan
+A detailed test plan is written to document test scope and objective, test resources,
+duration and detailed test cases. This is comprised of unit testes, integration testes and
+user acceptance tests (UAT).
+● Perform System Testing
+The test scenarios are run to validate every system module such as orders processing,
+inventory updates, sales reporting, and tracking. Any errors and bugs that arise are
+noted and resolved.
+● Analyze Test Results
+The test results are compared against the required system behavior. It is used to verify
+data integrity, load performance and check response times in different screen resolutions
+across different devices.
+● System Deployment and Monitoring
+The system is then used in a real environment following successful tests. Performance
+and usage are observed via monitoring tools, and final adjustments are made to enable,
+for example, resolving potential issues.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 62
+Figure 14
+Testing and Operating Procedures
+Project Evaluation
+Figure 15 shows the ISO/IEC 25010 model that serves as a framework for evaluating the
+quality of a product. In this project, the researchers will apply the ISO/IEC 25010 model to
+assess the web application, using its criteria to measure essential quality aspects such as
+Functional Suitability, Performance Efficiency, Interaction Capability, Reliability, and Security.
+● Functional Suitability will determine if the system will meet all the required
+functionality, focusing on its accuracy, completeness and relevance for the fulfilment of
+HAPAG SA MARIKINA's business needs.
+● Performance Efficiency will test how good the system runs under different situations,
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 63
+including the ability to deal with the amount of data sent and users interacted with,
+making it work how it does with the resources it has.
+● Compatibility guarantees the system can optimally run on various devices and platforms
+available in restaurants. The online system is tested for compatibility (receipt printers,
+tablets and kitchen display systems integration) and openness to shared network
+resources or browsers.
+● Reliability will be assessed considering, where system stability and ability to supply
+resources reliably and consistently over time, i.e., with significant low downtime and
+predictable fulfillment of the resource availability requirements.
+● Security will be reviewed, to further make sure the system is guarded against anything
+unknown, like unauthorized access or leaks, since the sensitive data of employees and
+organizations will not be put at risk. Compatibility will affect the ability of a product,
+system or component to interconnect with a product, system or component, and/or work
+together with a product, system or component to process data or in the way in which a
+product, system or component can be used with another product, system or component.
+With this quality parameter system based on the ISO/IEC 25010 model, authors can
+determine literal measures that permit analysis of the performance and effectiveness of the web
+application and which can provide a valuable contribution to guarantee that the final product
+complies with at least minimal quality values.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 64
+Figure 15
+ISO 25010
+Table 12 illustrates how user feedback on the system development and progress will be
+measured using the Likert scale. This assessment method is effective for the reason that it does
+away with the grey area, which gets people to provide input in the more specific. This measure
+emphasizes strengths and weaknesses and, in turn, yields a closer understanding of users'
+perceptions. Higher scores (4–6) may indicate what works well or needs more improvement,
+whereas lower ones (1–3) may point to significant problems to be attended to in time. This scale
+ensures system enhancements are closely aligned with users' expectations and requirements, by
+soliciting more specific and helpful feedback.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 65
+Table 12
+Likert Scale
+Strongly
+Disagree Disagree Slightly
+Disagree
+Strongly
+Agree Agree Slightly
+Agree
+1 2 3 4 5 6
+Work Plan
+Table 13 shows the work breakdown structure of the project documentation for the
+second semester. It indicates the phases of the proposed project and specifies the activities
+corresponding to it. It also tells the duration of each phase and if it’s already completed, in
+progress or not yet started.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 66
+Table 13
+Work Breakdown Structure for Second Semester
+WORK BREAKDOWN STRUCTURE (2024-2025)
+Phases Activities
+Designated
+Member/s
+January
+2025
+February
+2025
+March
+2025
+April
+2025
+May
+2025
+Week Week Week Week Week
+1 2 3 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4
+Requirement
+Planning
+Title Proposal Team
+Title Approval Team
+Adviser Approval Team
+Project
+Requirements Team
+Conduct
+Interview Team
+Finalize
+Requirements Team
+User Design
+Build models and
+Prototype Team
+Data gathering Team
+Finalize System
+Design Team
+Development
+Application
+Development Team
+Coding Team
+Testing
+Usability Testing Team
+System Testing Team
+Legend: Done On going To-do
+Table 14 shows the work breakdown structure for the second semester of this academic
+year. Most of the development of the project will be done in this stage of the project.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 67
+Table 14
+Work Breakdown Structure for firstSemester
+WORK BREAKDOWN STRUCTURE (2024-2025)
+Phases Activities Designated
+Member/s
+January
+2025
+February
+2025
+March
+2025
+April
+2025
+May
+2025
+Week Week Week Week Week
+1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4
+Development Application
+Development
+Team
+Coding Team
+Testing Usability
+Testing
+Team
+System
+Testing
+Team
+Deployment Evaluation
+per module
+Deployed
+Team
+Evaluation Evaluation of
+completely
+developed
+system
+Launch System
+Release
+Team
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 68
+Potential for Commercialization
+The web application for HAPAG SA MARIKINA has the potential to boost the
+profitability of the business owner by increasing efficiency, and improving the experiences of
+customers and business owners and lessens the hassle of managing orders and also facilitates
+faster transactions, tracking of sales, and updates of inventory.
+Market Model
+Figure 16 shows the TAM, SAM, and SOM model to help visualize the scope of the
+application in terms of its usage. Total Addressable Market (TAM) represents the total number of
+restaurants in (NCR) that can possibly adopt the system (Philippine Statistics Authority, 2021).
+Service Addressable Market (SAM) represents the current number of Restaurants in Marikina
+that may potentially be one of the users of the system (Tripadvisor). Service Obtainable Market
+(SOM) represents the total number of active employees who will use the system.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 69
+Figure 16
+Market Model
+Measurable Benefits
+The system, a web-based Restaurant Point of Sale and Inventory Management application
+developed by I.T. students at the Technological Institute of the Philippines in Quezon City, offers
+the following measurable advantages:
+Reduced Inventory Errors:
+Through automated stock tracking and real-time inventory updates, the system
+significantly lowers the risk of human error in inventory logging, with potential error reduction
+of up to 80%, leading to more accurate stock records.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 70
+Improved Sales Monitoring:
+Sales are registered and categorized on a daily basis, recording them in digital format
+and the food type to allow 100% error free recording and eliminate one of the disparities which
+occur when a manual sales log is returned to the restaurant, boosting the restaurant’s advance
+planning and forecasting ability.
+Minimized Waste and Overstocking:
+Inventory alerts and usage monitoring are sent to operators in real-time, resulting in less
+spoilage and less over-purchasing, thereby reducing waste by an estimated 20–30%.
+Centralized Menu and Item Management:
+Staff can update menu items, prices, or availability through a centralized dashboard,
+reducing the time spent on menu management tasks from hours to just minutes.
+Enhanced Staff Productivity:
+Menu items can be updated, as can pricing or availability, by staff in a central admin
+panel, cutting what currently might be several hours of time spent on menu management down to
+minutes.
+Accurate and Secure Reporting:
+By replacing manual processes with automated workflows, employees can streamline
+tasks and productivity is expected to rise by 10 – 20% throughout operational hours.
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 71
+Three-Year Product Roadmap
+Table 13 presents the proposed three (3)-year product roadmap that determines the
+projected product development and enhancement path also for the Restaurant Point of Sale and
+Inventory Management System within the Organization. This roadmap is aimed at improving
+different aspects such as: features, user experience, scalability and systems integrations. Over
+three years of the project period, the project members will incrementally develop the tool
+data, enhance system performance, and incorporate feedback from users to promote long-term
+usability and utility. Every year’s target is only a goal, to measure the progress and to plan
+the development according to the requirements of the restaurant operation while the restaurant
+business is growing up.
+Table 15
+Three-Year Product Roadmap
+Category Year 1 Year 2 Year 3
+Price Free Free Free
+Performanc
+e
+Functional on standard
+computers and Android
+devices with real-time
+updates, smooth
+transaction processing,
+and basic analytics
+Optimized speed,
+reduced latency, and
+better load handling
+across devices
+Enhanced
+responsiveness,
+scalability for
+multi-branch use, and
+cloud sync
+Key
+Features
+Full POS and Inventory
+System with menu
+management, real-time
+stock updates, expiry
+alerts, user accounts,
+role-based modules, and
+KDS for kitchen
+UI/UX overhaul,
+integration of online
+payments (e.g., GCash,
+Maya), employee
+performance tracking,
+and sales comparisons
+Predictive analytics,
+AI-driven sales
+forecasting, waste
+reduction automation,
+and integration with
+accounting tools
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 72
+References
+https://www.researchgate.net/publication/372653862_Inventory_Manage
+ment_Systems_IMS
+https://www.researchgate.net/publication/379431680_Point_of_Sale's_Tra
+nsaction_Data_Envisioning_Micro_Small_and_Medium_Enterprise_MSME's_In
+ventory_Management_Strategy
+https://www.researchgate.net/publication/383947700_A_Review_of_Exist
+ing_Inventory_Management_Systems
+https://www.researchgate.net/publication/381956584_RESEARCH_INDE
+XING_ALGORITHS
+https://www.researchgate.net/publication/372734013
+https://www.researchgate.net/publication/386057817_Optimizing_Offline_Mode_and_D
+ata_Synchronization_Techniques_for_Literature_Translation_Applications_on_Mobile_Devicesf
+https://www.researchgate.net/publication/383978487_A_Comprehensive_
+Review_of_How_the_Smart_Waste_Management_System_Works
+https://www.researchgate.net/publication/386057817_Optimizing_Offline
+_Mode_and_Data_Synchronization_Techniques_for_Literature_Translation_App
+lications_on_Mobile_Devices
+RestoTrack: A Web and Mobile based Inventory and POS Management Utilizing B - Tree Indexing Algorithm 73
+https://www.researchgate.net/publication/371665415_DATA_ANALYTIC
+S_AND_ITS_IMPACT_ON_FUTURE
+Extendaretail. (2025). POS systems: your complete guide to success. Retrieved from
+https://www.extendaretail.com/resource/pos-systems-the-ultimate-guide/
+Number Analytics. (2023). 7 Surprising Stats: POS Analysis Boosts Retail & E-commerce Sales.
+Retrieved from https://www.numberanalytics.com/blog/surprising-pos-stats-retail-ecommerce
+https://www.tripadvisor.com/FindRestaurants?geo=312692&establishmentTypes=10591
+%2C11776%2C16556%2C9900&mealTypes=10597%2C10598%2C10599%2C10606&
+broadened=false

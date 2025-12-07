@@ -7,6 +7,7 @@ use App\Enums\InventoryStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -229,5 +230,11 @@ class Product extends Model
     public function scopeSoonestExpiring($query)
     {
         return $query->orderBy('expiration_date', 'asc');
+    }
+
+    public function menus(): BelongsToMany
+    {
+        return $this->belongsToMany(Menu::class, 'menu_product')
+            ->withPivot('quantity_needed');
     }
 }
