@@ -237,4 +237,9 @@ class Product extends Model
         return $this->belongsToMany(Menu::class, 'menu_product')
             ->withPivot('quantity_needed');
     }
+
+    public function inventoryItem()
+    {
+        return $this->hasOne(InventoryItem::class);
+    }
 }

@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUuids;
+    use HasFactory, Notifiable, HasUuids, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -60,15 +61,6 @@ class User extends Authenticatable
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Accessors & Mutators
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Get the user's full name.
-     */
     protected function fullName(): Attribute
     {
         return Attribute::get(function () {
@@ -82,9 +74,6 @@ class User extends Authenticatable
         });
     }
 
-    /**
-     * Get the user's initials.
-     */
     public function getInitialsAttribute(): string
     {
         $firstInitial = $this->first_name ? strtoupper(substr($this->first_name, 0, 1)) : '';
@@ -93,85 +82,46 @@ class User extends Authenticatable
         return $firstInitial . $lastInitial;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helper Methods
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Check if user is an admin.
-     */
     public function isAdmin(): bool
     {
         return $this->user_type->value === UserType::Admin;
     }
 
-    /**
-     * Check if user is a manager.
-     */
     public function isManager(): bool
     {
         return $this->user_type->value === UserType::Manager;
     }
 
-    /**
-     * Check if user is an employee.
-     */
     public function isEmployee(): bool
     {
         return $this->user_type->value === UserType::Employee;
     }
 
-    /**
-     * Get the user's role name.
-     */
     public function getRoleNameAttribute(): string
     {
         return $this->user_type->description;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Query Scopes
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Scope a query to only include admins.
-     */
     public function scopeAdmins($query)
     {
         return $query->where('user_type', UserType::Admin);
     }
 
-    /**
-     * Scope a query to only include managers.
-     */
     public function scopeManagers($query)
     {
         return $query->where('user_type', UserType::Manager);
     }
 
-    /**
-     * Scope a query to only include employees.
-     */
     public function scopeEmployees($query)
     {
         return $query->where('user_type', UserType::Employee);
     }
 
-    /**
-     * Scope a query to exclude admins.
-     */
     public function scopeNonAdmins($query)
     {
         return $query->whereNot('user_type', UserType::Admin);
     }
 
-    /**
-     * Scope a query to search users by name or email.
-     */
     public function scopeSearch($query, $search)
     {
         return $query->where(function ($q) use ($search) {
@@ -180,4 +130,9 @@ class User extends Authenticatable
               ->orWhere('email', 'like', "%{$search}%");
         });
     }
+
+    public function processedPayments()
+{
+    return $this->hasMany(Payment::class, 'processed_by');
+}
 }

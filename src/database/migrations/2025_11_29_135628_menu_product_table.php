@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Menu::class);
             $table->foreignIdFor(Product::class);
             $table->decimal('quantity_needed', 10, 2)->default(1);
+            $table->primary(['menu_id', 'product_id']);
         });
     }
 
