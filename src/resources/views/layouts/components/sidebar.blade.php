@@ -42,6 +42,18 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.sales-report.*') ? 'active' : '' }}" href="{{ route('admin.sales-report.index') }}">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Sales Reports</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.waste-management.*') ? 'active' : '' }}" href="{{ route('admin.waste-management.index') }}">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Waste Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link ">
                     <i class="fas fa-receipt"></i>
                     <span>Transactions</span>

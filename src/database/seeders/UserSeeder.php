@@ -9,15 +9,33 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $userTypes = UserType::asArray();
+        User::factory()->create([
+            'user_type' => UserType::Admin,
+            'email' => 'admin@restotrack.com',
+        ]);
 
-        foreach($userTypes as $key => $value) {
-            User::factory(1)->create(['user_type' => $value]);
+        User::factory()->create([
+            'user_type' => UserType::Manager,
+            'email' => 'manager@restotrack.com',
+        ]);
+
+        $employeeRoles = ['cashier', 'cook', 'chef', 'server', 'barista'];
+
+        foreach ($employeeRoles as $role) {
+            $user = User::factory()->create([
+                'user_type' => UserType::Employee,
+                'email' => "{$role}@restotrack.com",
+            ]);
+            $user->assignRole($role);
+        }
+
+        foreach (range(1, 5) as $i) {
+            $user = User::factory()->create([
+                'user_type' => UserType::Employee,
+            ]);
+            $user->assignRole(fake()->randomElement($employeeRoles));
         }
     }
 }

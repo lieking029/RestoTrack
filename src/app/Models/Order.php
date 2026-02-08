@@ -37,6 +37,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'processed_by');
     }
 
+    public function processor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'processed_by');
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);

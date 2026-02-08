@@ -14,18 +14,12 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'menu_item_id',
+        'menu_id',
         'name',
         'unit_price',
         'quantity',
         'total',
     ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
 
     public function order(): BelongsTo
     {

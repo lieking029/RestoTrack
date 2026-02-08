@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUuids, HasRoles;
+    use HasFactory, Notifiable, HasUuids, HasRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -69,7 +70,7 @@ class User extends Authenticatable
                 $this->middle_name,
                 $this->last_name
             ]);
-            
+
             return trim(implode(' ', $parts));
         });
     }
@@ -78,8 +79,13 @@ class User extends Authenticatable
     {
         $firstInitial = $this->first_name ? strtoupper(substr($this->first_name, 0, 1)) : '';
         $lastInitial = $this->last_name ? strtoupper(substr($this->last_name, 0, 1)) : '';
-        
+
         return $firstInitial . $lastInitial;
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'created_by');
     }
 
     public function isAdmin(): bool
@@ -126,13 +132,13 @@ class User extends Authenticatable
     {
         return $query->where(function ($q) use ($search) {
             $q->where('first_name', 'like', "%{$search}%")
-              ->orWhere('last_name', 'like', "%{$search}%")
-              ->orWhere('email', 'like', "%{$search}%");
+                ->orWhere('last_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
         });
     }
 
     public function processedPayments()
-{
-    return $this->hasMany(Payment::class, 'processed_by');
-}
+    {
+        return $this->hasMany(Payment::class, 'processed_by');
+    }
 }

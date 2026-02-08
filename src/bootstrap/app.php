@@ -22,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
+        // $middleware->api(prepend: [
+        //     \Illuminate\Session\Middleware\StartSession::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

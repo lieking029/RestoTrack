@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserType;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,10 @@ class UserTypeMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || $user->user_type !== $type) {
-            abort(403, "Unauthenticated User Type");
+        $expectedType = constant(UserType::class . '::' . $type);
+
+        if (!$user || $user->user_type->value !== $expectedType) {
+            abort(403, "Unauthorized User Type");
         }
 
         return $next($request);

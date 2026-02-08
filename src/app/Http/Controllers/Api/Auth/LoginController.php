@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use Dotenv\Exception\ValidationException;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -22,20 +23,18 @@ class LoginController extends Controller
             ]);
         }
 
-        $request->session()->regenerate();
+        $user = Auth::user();
+        $token = $user->createToken('mobile-app')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login successful',
-            'user' => Auth::user(),
+            'user' => new UserResource($user->load('roles')),
+            'token' => $token,
         ]);
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out successfully',
@@ -44,14 +43,6 @@ class LoginController extends Controller
 
     public function me(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json([
-                'message' => "Unauthenticated",
-            ], 401);
-        }
-
-        return response()->json([
-            'user' => Auth::user()
-        ]);
+        return new UserResource($request->user()->load('roles'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -10,8 +11,9 @@ class KitchenController extends Controller
 {
     public function index()
     {
-        return response()->json(
+        return OrderResource::collection(
             Order::whereIn('status', ['CONFIRMED', 'IN_PREPARATION'])
+                ->with(['items', 'creator.roles', 'processor.roles'])
                 ->latest()
                 ->get()
         );
@@ -29,6 +31,6 @@ class KitchenController extends Controller
 
         $order->update(['status' => $data['status']]);
 
-        return response()->json($order);
+        return new OrderResource($order->load(['items', 'creator.roles']));
     }
 }
