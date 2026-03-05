@@ -12,13 +12,13 @@ class OrderPolicy
     public function pay(User $user, Order $order): bool
     {
         return $user->hasRole('cashier')
-            && $order->status === OrderStatus::PENDING;
+            && $order->status->value === OrderStatus::PENDING;
     }
 
     public function cancel(User $user, Order $order): bool
     {
-        return in_array($user->getRoleNames()->first(), ['cashier', 'manager'], true)
-            && in_array($order->status, [
+        return $user->hasAnyRole(['cashier', 'manager', 'server', 'barista'])
+            && in_array($order->status->value, [
                 OrderStatus::PENDING,
                 OrderStatus::CONFIRMED,
             ], true);
@@ -27,18 +27,18 @@ class OrderPolicy
     public function startPreparation(User $user, Order $order): bool
     {
         return $user->hasAnyRole(['cook', 'chef'])
-            && $order->status === OrderStatus::CONFIRMED;
+            && $order->status->value === OrderStatus::CONFIRMED;
     }
 
     public function markReady(User $user, Order $order): bool
     {
         return $user->hasAnyRole(['cook', 'chef'])
-            && $order->status === OrderStatus::INPREPARATION;
+            && $order->status->value === OrderStatus::INPREPARATION;
     }
 
     public function complete(User $user, Order $order): bool
     {
-        return $user->hasRole('cashier')
-            && $order->status === OrderStatus::READY;
+        return $user->hasAnyRole(['cashier', 'server', 'barista'])
+            && $order->status->value === OrderStatus::READY;
     }
 }

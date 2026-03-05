@@ -21,28 +21,27 @@ class PaymentController extends Controller
     {
         $data = $request->validate([
             'order_id' => ['required', 'exists:orders,id'],
-            'amount' => ['required', 'numeric', 'min:0'],
-            'method' => ['required', 'string'],
+            'amount_paid' => ['required', 'numeric', 'min:0'],
         ]);
 
         return DB::transaction(function () use ($data, $request) {
             $order = Order::lockForUpdate()->findOrFail($data['order_id']);
 
-             $this->authorize('pay', $order);
+            $this->authorize('pay', $order);
 
-            $this->inventoryService->deductForPaidOrder($order, $request->user()->id);
-
-            if ($order->status !== 'PENDING') {
+            if (!$order->status->is(OrderStatus::PENDING)) {
                 abort(422, 'Order cannot be paid.');
             }
 
+            $this->inventoryService->deductForPaidOrder($order, $request->user()->id);
+
             $payment = $order->payments()->create([
-                'amount' => $data['amount'],
-                'method' => $data['method'],
+                'amount' => $data['amount_paid'],
+                'method' => 'CASH',
                 'processed_by' => $request->user()->id,
             ]);
 
-            $order->update(['status' => 'CONFIRMED']);
+            $order->update(['status' => OrderStatus::CONFIRMED]);
 
             return response()->json($payment, 201);
         });

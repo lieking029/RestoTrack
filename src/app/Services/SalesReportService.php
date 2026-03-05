@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enums\OrderStatus;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -25,54 +24,35 @@ class SalesReportService
             $query->whereDate('created_at', '<=', $endDate);
         }
 
+        $result = $query->selectRaw('COUNT(*) as total_orders, COALESCE(SUM(total), 0) as total_revenue, COALESCE(SUM(tax), 0) as total_tax, COALESCE(AVG(total), 0) as average_order_value')->first();
+
         return [
-            'total_orders' => $query->count(),
-            'total_revenue' => $query->sum('total'),
-            'total_tax' => $query->sum('tax'),
-            'average_order_value' => $query->avg('total') ?? 0,
+            'total_orders' => (int) $result->total_orders,
+            'total_revenue' => (float) $result->total_revenue,
+            'total_tax' => (float) $result->total_tax,
+            'average_order_value' => (float) $result->average_order_value,
         ];
     }
 
     /**
-     * Get today's sales
+     * Get today's sales, weekly sales, monthly sales, and total orders in a single query.
      */
-    public function getTodaySales(): float
+    public function getQuickStats(): object
     {
-        return Order::where('status', OrderStatus::COMPLETED)
-            ->whereDate('created_at', Carbon::today())
-            ->sum('total');
-    }
+        $today = Carbon::today()->toDateString();
+        $weekStart = Carbon::now()->startOfWeek()->toDateTimeString();
+        $weekEnd = Carbon::now()->endOfWeek()->toDateTimeString();
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
 
-    /**
-     * Get this week's sales
-     */
-    public function getWeeklySales(): float
-    {
         return Order::where('status', OrderStatus::COMPLETED)
-            ->whereBetween('created_at', [
-                Carbon::now()->startOfWeek(),
-                Carbon::now()->endOfWeek()
-            ])
-            ->sum('total');
-    }
-
-    /**
-     * Get this month's sales
-     */
-    public function getMonthlySales(): float
-    {
-        return Order::where('status', OrderStatus::COMPLETED)
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->sum('total');
-    }
-
-    /**
-     * Get total completed orders count
-     */
-    public function getTotalOrders(): int
-    {
-        return Order::where('status', OrderStatus::COMPLETED)->count();
+            ->selectRaw("
+                COALESCE(SUM(CASE WHEN DATE(created_at) = ? THEN total ELSE 0 END), 0) as today_sales,
+                COALESCE(SUM(CASE WHEN created_at BETWEEN ? AND ? THEN total ELSE 0 END), 0) as weekly_sales,
+                COALESCE(SUM(CASE WHEN EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? THEN total ELSE 0 END), 0) as monthly_sales,
+                COUNT(*) as total_orders
+            ", [$today, $weekStart, $weekEnd, $month, $year])
+            ->first();
     }
 
     /**
@@ -80,27 +60,7 @@ class SalesReportService
      */
     public function getTopSellingItems(int $limit = 5, ?string $startDate = null, ?string $endDate = null): array
     {
-        $query = OrderItem::select(
-            'name',
-            DB::raw('SUM(quantity) as total_quantity'),
-            DB::raw('SUM(total) as total_revenue')
-        )
-            ->whereHas('order', function ($q) use ($startDate, $endDate) {
-                $q->where('status', OrderStatus::COMPLETED);
-
-                if ($startDate) {
-                    $q->whereDate('created_at', '>=', $startDate);
-                }
-
-                if ($endDate) {
-                    $q->whereDate('created_at', '<=', $endDate);
-                }
-            })
-            ->groupBy('name')
-            ->orderByDesc('total_quantity')
-            ->limit($limit);
-
-        return $query->get()->toArray();
+        return $this->getSellingItems($limit, 'desc', $startDate, $endDate);
     }
 
     /**
@@ -108,27 +68,32 @@ class SalesReportService
      */
     public function getLeastSellingItems(int $limit = 5, ?string $startDate = null, ?string $endDate = null): array
     {
-        $query = OrderItem::select(
-            'name',
-            DB::raw('SUM(quantity) as total_quantity'),
-            DB::raw('SUM(total) as total_revenue')
-        )
-            ->whereHas('order', function ($q) use ($startDate, $endDate) {
-                $q->where('status', OrderStatus::COMPLETED);
+        return $this->getSellingItems($limit, 'asc', $startDate, $endDate);
+    }
 
-                if ($startDate) {
-                    $q->whereDate('created_at', '>=', $startDate);
-                }
-
-                if ($endDate) {
-                    $q->whereDate('created_at', '<=', $endDate);
-                }
-            })
-            ->groupBy('name')
-            ->orderBy('total_quantity', 'asc')
+    private function getSellingItems(int $limit, string $direction, ?string $startDate, ?string $endDate): array
+    {
+        $query = DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.status', OrderStatus::COMPLETED)
+            ->select(
+                'order_items.name',
+                DB::raw('SUM(order_items.quantity) as total_quantity'),
+                DB::raw('SUM(order_items.total) as total_revenue')
+            )
+            ->groupBy('order_items.name')
+            ->orderBy('total_quantity', $direction)
             ->limit($limit);
 
-        return $query->get()->toArray();
+        if ($startDate) {
+            $query->whereDate('orders.created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('orders.created_at', '<=', $endDate);
+        }
+
+        return $query->get()->map(fn ($item) => (array) $item)->toArray();
     }
 
     /**
@@ -175,7 +140,7 @@ class SalesReportService
         $sales = Order::where('status', OrderStatus::COMPLETED)
             ->whereDate('created_at', Carbon::today())
             ->select(
-                DB::raw('HOUR(created_at) as hour'),
+                DB::raw('EXTRACT(HOUR FROM created_at) as hour'),
                 DB::raw('SUM(total) as total'),
                 DB::raw('COUNT(*) as orders')
             )
@@ -211,7 +176,7 @@ class SalesReportService
         $thisWeekSales = Order::where('status', OrderStatus::COMPLETED)
             ->whereBetween('created_at', [$thisWeekStart, $thisWeekEnd])
             ->select(
-                DB::raw('DAYOFWEEK(created_at) as day'),
+                DB::raw('EXTRACT(DOW FROM created_at) as day'),
                 DB::raw('SUM(total) as total')
             )
             ->groupBy('day')
@@ -221,7 +186,7 @@ class SalesReportService
         $lastWeekSales = Order::where('status', OrderStatus::COMPLETED)
             ->whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])
             ->select(
-                DB::raw('DAYOFWEEK(created_at) as day'),
+                DB::raw('EXTRACT(DOW FROM created_at) as day'),
                 DB::raw('SUM(total) as total')
             )
             ->groupBy('day')
@@ -232,7 +197,7 @@ class SalesReportService
         $thisWeekData = [];
         $lastWeekData = [];
 
-        for ($i = 1; $i <= 7; $i++) {
+        for ($i = 0; $i <= 6; $i++) {
             $thisWeekData[] = isset($thisWeekSales[$i]) ? (float) $thisWeekSales[$i] : 0;
             $lastWeekData[] = isset($lastWeekSales[$i]) ? (float) $lastWeekSales[$i] : 0;
         }

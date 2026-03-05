@@ -54,11 +54,11 @@ class Order extends Model
 
     public function isPayable(): bool
     {
-        return $this->status === OrderStatus::PENDING;
+        return $this->status->is(OrderStatus::PENDING);
     }
 
     public function canBePrepared(): bool
     {
-        return $this->status === OrderStatus::CONFIRMED;
+        return $this->status->is(OrderStatus::CONFIRMED);
     }
 }

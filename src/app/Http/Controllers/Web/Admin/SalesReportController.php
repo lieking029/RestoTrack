@@ -18,10 +18,11 @@ class SalesReportController extends Controller
      */
     public function index(SalesReportDataTable $dataTable)
     {
-        $todaySales = $this->salesReportService->getTodaySales();
-        $weeklySales = $this->salesReportService->getWeeklySales();
-        $monthlySales = $this->salesReportService->getMonthlySales();
-        $totalOrders = $this->salesReportService->getTotalOrders();
+        $quickStats = $this->salesReportService->getQuickStats();
+        $todaySales = (float) $quickStats->today_sales;
+        $weeklySales = (float) $quickStats->weekly_sales;
+        $monthlySales = (float) $quickStats->monthly_sales;
+        $totalOrders = (int) $quickStats->total_orders;
 
         $topSellingItems = $this->salesReportService->getTopSellingItems(5);
         $leastSellingItems = $this->salesReportService->getLeastSellingItems(5);

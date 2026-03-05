@@ -141,4 +141,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Payment::class, 'processed_by');
     }
+
+    public function transactions()
+    {
+        return $this->processedPayments();
+    }
 }

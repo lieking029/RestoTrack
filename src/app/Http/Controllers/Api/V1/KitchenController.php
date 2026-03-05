@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -12,7 +13,7 @@ class KitchenController extends Controller
     public function index()
     {
         return OrderResource::collection(
-            Order::whereIn('status', ['CONFIRMED', 'IN_PREPARATION'])
+            Order::whereIn('status', [OrderStatus::CONFIRMED, OrderStatus::INPREPARATION, OrderStatus::READY])
                 ->with(['items', 'creator.roles', 'processor.roles'])
                 ->latest()
                 ->get()
@@ -21,15 +22,23 @@ class KitchenController extends Controller
 
     public function updateStatus(Request $request, Order $order)
     {
+        $statusMap = [
+            'inPreparation' => OrderStatus::INPREPARATION,
+            'ready' => OrderStatus::READY,
+        ];
+
+        $policyMap = [
+            'inPreparation' => 'startPreparation',
+            'ready' => 'markReady',
+        ];
+
         $data = $request->validate([
-            'status' => ['required', 'in:IN_PREPARATION,READY'],
+            'status' => ['required', 'in:' . implode(',', array_keys($statusMap))],
         ]);
 
-        if (!in_array($order->status, ['CONFIRMED', 'IN_PREPARATION'])) {
-            abort(422, 'Invalid order state.');
-        }
+        $this->authorize($policyMap[$data['status']], $order);
 
-        $order->update(['status' => $data['status']]);
+        $order->update(['status' => $statusMap[$data['status']]]);
 
         return new OrderResource($order->load(['items', 'creator.roles']));
     }

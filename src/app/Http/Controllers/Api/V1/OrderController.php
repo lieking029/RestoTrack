@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Services\InventoryService;
@@ -13,19 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function my(Request $request)
-    {
-        $orders = $request->user()
-            ->orders()
-            ->with(['items', 'creator.roles', 'processor.roles'])
-            ->latest()
-            ->get();
-
-        return OrderResource::collection($orders);
-    }
     /**
      * Handle the incoming request.
      */
+    public function my(Request $request)
+    {
+        return response()->json(
+            $request->user()->orders()
+                ->with(['items'])
+                ->latest()
+                ->get()
+        );
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -35,32 +34,40 @@ class OrderController extends Controller
         ]);
 
         return DB::transaction(function () use ($data, $request) {
-            $order = $request->user()->orders()->create([
-                'status' => OrderStatus::PENDING(),
-            ]);
+            $menuIds = collect($data['items'])->pluck('menu_id');
+            $menus = Menu::whereIn('id', $menuIds)->get()->keyBy('id');
 
             $subtotal = 0;
 
+            $order = $request->user()->orders()->create([
+                'status' => OrderStatus::PENDING,
+                'subtotal' => 0,
+                'tax' => 0,
+                'total' => 0,
+            ]);
+
             foreach ($data['items'] as $item) {
-                $menu = Menu::findOrFail($item['menu_id']);
-                $lineTotal = $menu->price * $item['quantity'];
-                $subtotal += $lineTotal;
+                $menu = $menus[$item['menu_id']];
+                $itemTotal = $menu->price * $item['quantity'];
+                $subtotal += $itemTotal;
 
                 $order->items()->create([
-                    'menu_id' => $menu->id,
+                    'menu_id' => $item['menu_id'],
                     'name' => $menu->name,
                     'unit_price' => $menu->price,
                     'quantity' => $item['quantity'],
-                    'total' => $lineTotal,
+                    'total' => $itemTotal,
                 ]);
             }
 
+            $tax = round($subtotal * 0.12, 2);
             $order->update([
                 'subtotal' => $subtotal,
-                'total' => $subtotal,
+                'tax' => $tax,
+                'total' => $subtotal + $tax,
             ]);
 
-            return new OrderResource($order->load(['items']));
+            return response()->json($order->load('items'), 201);
         });
     }
 
@@ -72,7 +79,7 @@ class OrderController extends Controller
             'status' => OrderStatus::COMPLETED,
         ]);
 
-        return new OrderResource($order);
+        return response()->json($order);
     }
 
     public function cancel(Order $order, InventoryService $inventoryService)
@@ -81,7 +88,7 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order, $inventoryService) {
 
-            if ($order->status === OrderStatus::CONFIRMED) {
+            if ($order->status->is(OrderStatus::CONFIRMED)) {
                 $inventoryService->restoreForCancelledOrder($order, auth()->id());
             }
 
@@ -90,6 +97,6 @@ class OrderController extends Controller
             ]);
         });
 
-        return new OrderResource($order);
+        return response()->json($order->fresh(['items']));
     }
 }

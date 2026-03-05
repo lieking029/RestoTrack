@@ -19,10 +19,11 @@ class DashboardController extends Controller
     public function index()
     {
         // Sales Metrics
-        $todaySales = $this->salesReportService->getTodaySales();
-        $weeklySales = $this->salesReportService->getWeeklySales();
-        $monthlySales = $this->salesReportService->getMonthlySales();
-        $totalOrders = $this->salesReportService->getTotalOrders();
+        $quickStats = $this->salesReportService->getQuickStats();
+        $todaySales = (float) $quickStats->today_sales;
+        $weeklySales = (float) $quickStats->weekly_sales;
+        $monthlySales = (float) $quickStats->monthly_sales;
+        $totalOrders = (int) $quickStats->total_orders;
 
         // Chart Data
         $weekComparison = $this->salesReportService->getWeekComparison();

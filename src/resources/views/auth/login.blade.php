@@ -57,21 +57,21 @@
                             Login
                         </button>
 
-                        <div class="position-relative mb-4">
+                        <!-- <div class="position-relative mb-4">
                             <hr style="border-color: #e0e0e0;">
                             <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted"
                                 style="font-size: 0.85rem;">
                                 OR
                             </span>
-                        </div>
+                        </div> -->
 
-                        <button type="button"
+                        <!-- <button type="button"
                             class="btn btn-lg w-100 d-flex align-items-center justify-content-center google-btn"
                             style="padding: 0.85rem; border-radius: 10px; border: 1.5px solid #dadce0; background-color: white; transition: all 0.3s ease; font-size: 0.95rem;">
                             <img src="https://www.google.com/favicon.ico" alt="Google"
                                 style="width: 20px; height: 20px; margin-right: 12px;">
                             <span style="color: #3c4043; font-weight: 500;">Continue with Google</span>
-                        </button>
+                        </button> -->
 
                         <div class="text-center mt-4">
                             <p class="mb-0" style="color: #6c757d; font-size: 0.9rem;">

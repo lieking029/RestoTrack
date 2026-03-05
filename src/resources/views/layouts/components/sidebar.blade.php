@@ -53,44 +53,14 @@
                     <span>Waste Management</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link ">
                     <i class="fas fa-receipt"></i>
                     <span>Transactions</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
-
-        {{-- <div class="nav-section-title">Management</div> --}}
-
-        {{-- <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link ">
-                    <i class="fas fa-clipboard"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul> --}}
     </nav>
-
-    {{-- <div class="sidebar-bottom">
-        <div class="user-profile" onclick="window.location.href=''">
-            <div class="user-avatar">
-                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 2)) }}
-            </div>
-            <div class="user-info">
-                <h6>{{ auth()->user()->name ?? 'User' }}</h6>
-                <p>{{ auth()->user()->role ?? 'Staff' }}</p>
-            </div>
-            <i class="fas fa-chevron-right ms-auto"></i>
-        </div>
-    </div> --}}
 </div>
 
 <style>
