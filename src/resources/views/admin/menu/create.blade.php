@@ -117,13 +117,12 @@
 
                         <!-- Dish Image Upload -->
                         <div class="mb-3">
-                            <label for="dish_picture" class="form-label">Dish Image <span class="text-danger">*</span></label>
-                            <input type="file" 
-                                   class="form-control @error('dish_picture') is-invalid @enderror" 
-                                   id="dish_picture" 
-                                   name="dish_picture" 
-                                   accept="image/*"
-                                   required>
+                            <label for="dish_picture" class="form-label">Dish Image (Optional)</label>
+                            <input type="file"
+                                   class="form-control @error('dish_picture') is-invalid @enderror"
+                                   id="dish_picture"
+                                   name="dish_picture"
+                                   accept="image/*">
                             @error('dish_picture')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -163,12 +162,15 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Quantity Needed</label>
-                                        <input type="number" 
-                                               class="form-control" 
-                                               name="ingredients[0][quantity_needed]" 
-                                               step="0.01" 
-                                               min="0.01"
-                                               placeholder="0.00">
+                                        <div class="input-group">
+                                            <input type="number"
+                                                   class="form-control quantity-input"
+                                                   name="ingredients[0][quantity_needed]"
+                                                   step="0.01"
+                                                   min="0.01"
+                                                   placeholder="0.00">
+                                            <span class="input-group-text unit-label" style="min-width: 50px; justify-content: center;">--</span>
+                                        </div>
                                     </div>
                                     <div class="col-md-1 d-flex align-items-end">
                                         <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeIngredient(this)" disabled>
@@ -326,11 +328,26 @@
         }
     });
 
+    // Update unit label when ingredient is selected
+    function updateUnitLabel(select) {
+        const row = select.closest('.ingredient-row');
+        const unitLabel = row.querySelector('.unit-label');
+        const selected = select.options[select.selectedIndex];
+        unitLabel.textContent = selected.value ? (selected.dataset.unit || '--') : '--';
+    }
+
+    // Bind change event to ingredient selects
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('ingredient-select')) {
+            updateUnitLabel(e.target);
+        }
+    });
+
     // Add Ingredient
     function addIngredient() {
         const container = document.getElementById('ingredientsContainer');
         const newRow = document.querySelector('.ingredient-row').cloneNode(true);
-        
+
         // Update names and clear values
         newRow.querySelectorAll('select, input').forEach(field => {
             const name = field.getAttribute('name');
@@ -339,10 +356,13 @@
             }
             field.value = '';
         });
-        
+
+        // Reset unit label
+        newRow.querySelector('.unit-label').textContent = '--';
+
         // Enable remove button
         newRow.querySelector('.btn-danger').disabled = false;
-        
+
         container.appendChild(newRow);
         ingredientIndex++;
     }

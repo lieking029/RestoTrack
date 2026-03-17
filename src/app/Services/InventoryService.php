@@ -28,6 +28,9 @@ class InventoryService
 
                 $inventory->decrement('stock_quantity', $requiredQty);
 
+                // Sync Product model stock and status
+                $product->updateStock($requiredQty);
+
                 InventoryMovement::create([
                     'inventory_item_id' => $inventory->id,
                     'order_id' => $order->id,
@@ -60,6 +63,9 @@ class InventoryService
                 }
 
                 $inventory->increment('stock_quantity', $restoreQty);
+
+                // Sync Product model stock and status
+                $product->updateStock($restoreQty, true);
 
                 InventoryMovement::create([
                     'inventory_item_id' => $inventory->id,

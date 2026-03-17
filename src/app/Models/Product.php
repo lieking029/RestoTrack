@@ -145,7 +145,7 @@ class Product extends Model
     /**
      * Calculate the status based on remaining stock.
      */
-    protected function calculateStatus(): InventoryStatus
+    public function calculateStatus(): InventoryStatus
     {
         $lowStockThreshold = (int) ($this->initial_stock * 0.2);
 

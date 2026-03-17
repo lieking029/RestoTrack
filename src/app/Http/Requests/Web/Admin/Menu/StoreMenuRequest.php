@@ -26,7 +26,7 @@ class StoreMenuRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:0|max:999999.99',
             'category' => 'required|integer|in:0,1,2,3,4',
-            'dish_picture' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'dish_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'nullable',
             'ingredients' => 'nullable|array',
             'ingredients.*.product_id' => 'required_with:ingredients|exists:products,id',

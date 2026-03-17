@@ -157,12 +157,15 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-label">Quantity Needed</label>
-                                            <input type="number" 
-                                                   class="form-control" 
-                                                   name="ingredients[{{ $index }}][quantity_needed]" 
-                                                   value="{{ $product->pivot->quantity_needed }}"
-                                                   step="0.01" 
-                                                   min="0.01">
+                                            <div class="input-group">
+                                                <input type="number"
+                                                       class="form-control quantity-input"
+                                                       name="ingredients[{{ $index }}][quantity_needed]"
+                                                       value="{{ $product->pivot->quantity_needed }}"
+                                                       step="0.01"
+                                                       min="0.01">
+                                                <span class="input-group-text unit-label" style="min-width: 50px; justify-content: center;">{{ \App\Enums\UnitOfMeasurement::getLabel($product->unit_of_measurement->value) }}</span>
+                                            </div>
                                         </div>
                                         <div class="col-md-1 d-flex align-items-end">
                                             <button type="button" 
@@ -190,12 +193,15 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-label">Quantity Needed</label>
-                                            <input type="number" 
-                                                   class="form-control" 
-                                                   name="ingredients[0][quantity_needed]" 
-                                                   step="0.01" 
-                                                   min="0.01"
-                                                   placeholder="0.00">
+                                            <div class="input-group">
+                                                <input type="number"
+                                                       class="form-control quantity-input"
+                                                       name="ingredients[0][quantity_needed]"
+                                                       step="0.01"
+                                                       min="0.01"
+                                                       placeholder="0.00">
+                                                <span class="input-group-text unit-label" style="min-width: 50px; justify-content: center;">--</span>
+                                            </div>
                                         </div>
                                         <div class="col-md-1 d-flex align-items-end">
                                             <button type="button" class="btn btn-danger btn-sm w-100" onclick="removeIngredient(this)" disabled>
@@ -360,12 +366,27 @@
         }
     });
 
+    // Update unit label when ingredient is selected
+    function updateUnitLabel(select) {
+        const row = select.closest('.ingredient-row');
+        const unitLabel = row.querySelector('.unit-label');
+        const selected = select.options[select.selectedIndex];
+        unitLabel.textContent = selected.value ? (selected.dataset.unit || '--') : '--';
+    }
+
+    // Bind change event to ingredient selects
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('ingredient-select')) {
+            updateUnitLabel(e.target);
+        }
+    });
+
     // Add Ingredient
     function addIngredient() {
         const container = document.getElementById('ingredientsContainer');
         const firstRow = document.querySelector('.ingredient-row');
         const newRow = firstRow.cloneNode(true);
-        
+
         // Update names and clear values
         newRow.querySelectorAll('select, input').forEach(field => {
             const name = field.getAttribute('name');
@@ -374,10 +395,13 @@
             }
             field.value = '';
         });
-        
+
+        // Reset unit label
+        newRow.querySelector('.unit-label').textContent = '--';
+
         // Enable remove button
         newRow.querySelector('.btn-danger').disabled = false;
-        
+
         container.appendChild(newRow);
         ingredientIndex++;
     }

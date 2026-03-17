@@ -15,6 +15,9 @@ class InventoryOpsService
 
             $locked->increment('stock_quantity', $qty);
 
+            // Sync Product model stock and status
+            $locked->product->updateStock($qty, true);
+
             InventoryMovement::create([
                 'inventory_item_id' => $locked->id,
                 'order_id' => null,
@@ -37,6 +40,9 @@ class InventoryOpsService
             }
 
             $locked->decrement('stock_quantity', $qty);
+
+            // Sync Product model stock and status
+            $locked->product->updateStock($qty);
 
             InventoryMovement::create([
                 'inventory_item_id' => $locked->id,
@@ -63,6 +69,13 @@ class InventoryOpsService
             }
 
             $locked->update(['stock_quantity' => $newQty]);
+
+            // Sync Product model stock and status
+            if ($diff > 0) {
+                $locked->product->updateStock(abs($diff), true);
+            } else {
+                $locked->product->updateStock(abs($diff));
+            }
 
             InventoryMovement::create([
                 'inventory_item_id' => $locked->id,

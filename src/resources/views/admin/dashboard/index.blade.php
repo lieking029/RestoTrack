@@ -322,7 +322,7 @@
                                             <tr>
                                                 <td>
                                                     <a href="{{ route('admin.sales-report.show', $order->id) }}" class="text-decoration-none">
-                                                        #{{ substr($order->id, 0, 8) }}
+                                                        #{{ substr($order->id, 0, 5) }}
                                                     </a>
                                                     <br>
                                                     <small class="text-muted">{{ $order->created_at->diffForHumans() }}</small>

@@ -8,7 +8,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h2 class="page-title">Order Details</h2>
-                <p class="text-muted">Order #{{ substr($order->id, 0, 8) }}...</p>
+                <p class="text-muted">Order #{{ substr($order->id, 0, 5) }}</p>
             </div>
             <a href="{{ route('admin.sales-report.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Reports

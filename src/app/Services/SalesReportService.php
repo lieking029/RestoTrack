@@ -40,8 +40,8 @@ class SalesReportService
     public function getQuickStats(): object
     {
         $today = Carbon::today()->toDateString();
-        $weekStart = Carbon::now()->startOfWeek()->toDateTimeString();
-        $weekEnd = Carbon::now()->endOfWeek()->toDateTimeString();
+        $weekStart = Carbon::now()->startOfWeek(Carbon::SUNDAY)->toDateTimeString();
+        $weekEnd = Carbon::now()->endOfWeek(Carbon::SATURDAY)->toDateTimeString();
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
 
@@ -168,10 +168,10 @@ class SalesReportService
      */
     public function getWeekComparison(): array
     {
-        $thisWeekStart = Carbon::now()->startOfWeek();
-        $thisWeekEnd = Carbon::now()->endOfWeek();
-        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek();
-        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+        $thisWeekStart = Carbon::now()->startOfWeek(Carbon::SUNDAY);
+        $thisWeekEnd = Carbon::now()->endOfWeek(Carbon::SATURDAY);
+        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek(Carbon::SUNDAY);
+        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek(Carbon::SATURDAY);
 
         $thisWeekSales = Order::where('status', OrderStatus::COMPLETED)
             ->whereBetween('created_at', [$thisWeekStart, $thisWeekEnd])

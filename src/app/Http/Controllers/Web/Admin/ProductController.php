@@ -67,7 +67,13 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
+        $validated = $request->validated();
+        $product->update($validated);
+
+        // Recalculate status if stock fields were changed
+        if (isset($validated['remaining_stock']) || isset($validated['initial_stock'])) {
+            $product->update(['status' => $product->calculateStatus()]);
+        }
 
         alert()->success('Product has been updated successfully');
         return redirect()->route('admin.product.index');

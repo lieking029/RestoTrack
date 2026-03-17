@@ -753,7 +753,85 @@
                     badge.remove();
                 }
 
-                // Show success message
+                // Update dropdown header badge
+                const headerBadge = document.querySelector('.dropdown-header .badge');
+                if (data.counts.total > 0) {
+                    const badgeClass = data.counts.critical > 0 ? 'bg-danger' : 'bg-warning';
+                    const badgeText = data.counts.total + ' Alert' + (data.counts.total > 1 ? 's' : '');
+                    if (headerBadge) {
+                        headerBadge.className = 'badge ' + badgeClass;
+                        headerBadge.textContent = badgeText;
+                    } else {
+                        const newHeaderBadge = document.createElement('span');
+                        newHeaderBadge.className = 'badge ' + badgeClass;
+                        newHeaderBadge.textContent = badgeText;
+                        document.querySelector('.dropdown-header').appendChild(newHeaderBadge);
+                    }
+                } else if (headerBadge) {
+                    headerBadge.remove();
+                }
+
+                // Update alert summary
+                const alertSummary = document.querySelector('.alert-summary');
+                let summaryHtml = '';
+                if (data.counts.out_of_stock > 0) {
+                    summaryHtml += '<div class="alert-summary-item critical"><i class="fas fa-times-circle"></i><span>' + data.counts.out_of_stock + ' Out of Stock</span></div>';
+                }
+                if (data.counts.expired > 0) {
+                    summaryHtml += '<div class="alert-summary-item critical"><i class="fas fa-skull-crossbones"></i><span>' + data.counts.expired + ' Expired</span></div>';
+                }
+                if (data.counts.low_stock > 0) {
+                    summaryHtml += '<div class="alert-summary-item warning"><i class="fas fa-exclamation-triangle"></i><span>' + data.counts.low_stock + ' Low Stock</span></div>';
+                }
+                if (data.counts.expiring_soon > 0) {
+                    summaryHtml += '<div class="alert-summary-item warning"><i class="fas fa-clock"></i><span>' + data.counts.expiring_soon + ' Expiring Soon</span></div>';
+                }
+                if (alertSummary) {
+                    if (summaryHtml) {
+                        alertSummary.innerHTML = summaryHtml;
+                        alertSummary.style.display = '';
+                    } else {
+                        alertSummary.style.display = 'none';
+                    }
+                } else if (summaryHtml) {
+                    const newSummary = document.createElement('div');
+                    newSummary.className = 'alert-summary';
+                    newSummary.innerHTML = summaryHtml;
+                    const notificationsList = document.querySelector('.notifications-list');
+                    notificationsList.parentNode.insertBefore(newSummary, notificationsList);
+                }
+
+                // Update notifications list
+                const notificationsList = document.querySelector('.notifications-list');
+                if (data.alerts && data.alerts.length > 0) {
+                    let listHtml = '';
+                    data.alerts.forEach(function(alert) {
+                        const priorityClass = alert.priority === 'critical' ? ' critical' : (alert.priority === 'high' ? ' high' : '');
+                        listHtml += '<a href="' + alert.action_url + '" class="notification-item' + priorityClass + '">';
+                        listHtml += '<div class="notification-icon ' + alert.icon_class + '"><i class="fas ' + alert.icon + '"></i></div>';
+                        listHtml += '<div class="notification-content">';
+                        listHtml += '<p class="notification-text">' + alert.message + '</p>';
+                        listHtml += '<div class="notification-meta">';
+                        listHtml += '<small class="notification-time"><i class="fas fa-clock"></i> ' + alert.time_ago + '</small>';
+                        listHtml += '<span class="notification-action">' + alert.action_label + ' <i class="fas fa-arrow-right"></i></span>';
+                        listHtml += '</div></div></a>';
+                    });
+                    notificationsList.innerHTML = listHtml;
+                } else {
+                    notificationsList.innerHTML = '<div class="no-notifications"><i class="fas fa-check-circle"></i><p>All clear! No alerts at this time.</p></div>';
+                }
+
+                // Update sidebar inventory badge if present
+                const sidebarBadge = document.querySelector('.sidebar .inventory-badge, .sidebar .nav-badge');
+                if (sidebarBadge) {
+                    if (data.counts.total > 0) {
+                        sidebarBadge.textContent = data.counts.total > 99 ? '99+' : data.counts.total;
+                        sidebarBadge.style.display = '';
+                    } else {
+                        sidebarBadge.style.display = 'none';
+                    }
+                }
+
                 console.log('Alerts refreshed successfully');
             })
             .catch(error => {
