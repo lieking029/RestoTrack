@@ -24,8 +24,8 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'initial_stock' => ['sometimes', 'numeric', 'min:0'],
-            'remaining_stock' => ['sometimes', 'numeric', 'min:0'],
+            'initial_stock' => ['sometimes', 'numeric', 'min:0', 'gte:remaining_stock'],
+            'remaining_stock' => ['sometimes', 'numeric', 'min:0', 'lte:initial_stock'],
             'stock_out' => ['sometimes', 'numeric', 'min:0'],
             'unit_of_measurement' => ['sometimes', new EnumValue(UnitOfMeasurement::class, false)],
             'expiration_date' => ['sometimes', 'date', 'after_or_equal:today'],
