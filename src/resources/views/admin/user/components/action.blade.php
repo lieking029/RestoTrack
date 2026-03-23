@@ -18,13 +18,15 @@
     </a>
     
     <!-- Delete Button -->
-    <button type="button" 
-            class="btn btn-sm btn-danger" 
+    @if(auth()->user()->isAdmin())
+    <button type="button"
+            class="btn btn-sm btn-danger"
             title="Delete User"
             data-bs-toggle="tooltip"
             onclick="deleteUser('{{ $user->id }}', '{{ $user->full_name }}')">
         <i class="fas fa-trash"></i>
     </button>
+    @endif
 </div>
 
 <script>

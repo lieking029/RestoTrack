@@ -84,6 +84,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if (auth()->user()->isManager()) {
+            abort(403, 'Managers are not allowed to delete products.');
+        }
+
         $product->delete();
 
         alert()->success('Product has been deleted successfully');

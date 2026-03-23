@@ -139,6 +139,10 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
+        if (auth()->user()->isManager()) {
+            abort(403, 'Managers are not allowed to delete menu items.');
+        }
+
         // Delete image
         if ($menu->dish_picture && Storage::disk('public')->exists($menu->dish_picture)) {
             Storage::disk('public')->delete($menu->dish_picture);

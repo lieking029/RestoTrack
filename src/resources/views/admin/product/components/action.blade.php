@@ -13,13 +13,15 @@
         <i class="fas fa-edit"></i>
     </a>
     
-    <button type="button" 
-            class="btn btn-sm btn-danger" 
+    @if(auth()->user()->isAdmin())
+    <button type="button"
+            class="btn btn-sm btn-danger"
             title="Delete Product"
             data-bs-toggle="tooltip"
             onclick="deleteProduct('{{ $product->id }}', '{{ $product->name }}')">
         <i class="fas fa-trash"></i>
     </button>
+    @endif
 </div>
 
 <script>

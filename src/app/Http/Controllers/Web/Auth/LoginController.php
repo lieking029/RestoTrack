@@ -13,23 +13,23 @@ class LoginController extends Controller
 {
     public function login(ValidateUserCredentialRequest $request)
     {
-        $admin = User::where('email', $request->email)
-            ->where('user_type', UserType::Admin())
+        $user = User::where('email', $request->email)
+            ->whereIn('user_type', [UserType::Admin, UserType::Manager])
             ->first();
 
-        if(!$admin) {
+        if(!$user) {
             return back()
             ->withInput($request->only('email'))
             ->withErrors(['email' => 'These credentials do not match our records.']);
         }
 
-        if(!\Hash::check($request->password, $admin->password)) {
+        if(!\Hash::check($request->password, $user->password)) {
             return back()
                 ->withInput($request->only('email'))
                 ->withErrors(['password' => 'These credentials do not match our records.']);
         }
 
-        Auth::login($admin);
+        Auth::login($user);
 
         return redirect()->route('admin.dashboard');
     }
