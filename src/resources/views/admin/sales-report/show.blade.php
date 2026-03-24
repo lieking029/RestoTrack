@@ -8,7 +8,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h2 class="page-title">Order Details</h2>
-                <p class="text-muted">Order #{{ substr($order->id, 0, 5) }}</p>
+                <p class="text-muted">Order #{{ substr($order->id, -4) }}</p>
             </div>
             <a href="{{ route('admin.sales-report.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Reports
@@ -116,9 +116,9 @@
                         $badgeClass = match ($order->status->value) {
                             \App\Enums\OrderStatus::COMPLETED => 'success',
                             \App\Enums\OrderStatus::PENDING => 'warning',
-                            \App\Enums\OrderStatus::CONFIRMED => 'info',
                             \App\Enums\OrderStatus::INPREPARATION => 'primary',
                             \App\Enums\OrderStatus::READY => 'secondary',
+                            \App\Enums\OrderStatus::SERVED => 'info',
                             \App\Enums\OrderStatus::CANCELLED => 'danger',
                             default => 'secondary'
                         };
@@ -126,9 +126,9 @@
                         $statusLabel = match ($order->status->value) {
                             \App\Enums\OrderStatus::COMPLETED => 'Completed',
                             \App\Enums\OrderStatus::PENDING => 'Pending',
-                            \App\Enums\OrderStatus::CONFIRMED => 'Confirmed',
                             \App\Enums\OrderStatus::INPREPARATION => 'In Preparation',
                             \App\Enums\OrderStatus::READY => 'Ready',
+                            \App\Enums\OrderStatus::SERVED => 'Served',
                             \App\Enums\OrderStatus::CANCELLED => 'Cancelled',
                             default => 'Unknown'
                         };

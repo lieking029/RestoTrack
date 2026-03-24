@@ -25,7 +25,7 @@ class OrderController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(Request $request, InventoryService $inventoryService)
     {
         $data = $request->validate([
             'items' => ['required', 'array', 'min:1'],
@@ -33,7 +33,7 @@ class OrderController extends Controller
             'items.*.quantity' => ['required', 'integer', 'min:1'],
         ]);
 
-        return DB::transaction(function () use ($data, $request) {
+        return DB::transaction(function () use ($data, $request, $inventoryService) {
             $menuIds = collect($data['items'])->pluck('menu_id');
             $menus = Menu::whereIn('id', $menuIds)->get()->keyBy('id');
 
@@ -67,16 +67,19 @@ class OrderController extends Controller
                 'total' => $subtotal + $tax,
             ]);
 
+            // Deduct inventory when order is created (kitchen needs ingredients)
+            $inventoryService->deductForPaidOrder($order, $request->user()->id);
+
             return response()->json($order->load('items'), 201);
         });
     }
 
-    public function complete(Order $order)
+    public function serve(Order $order)
     {
-        $this->authorize('complete', $order);
+        $this->authorize('serve', $order);
 
         $order->update([
-            'status' => OrderStatus::COMPLETED,
+            'status' => OrderStatus::SERVED,
         ]);
 
         return response()->json($order);
@@ -87,10 +90,7 @@ class OrderController extends Controller
         $this->authorize('cancel', $order);
 
         DB::transaction(function () use ($order, $inventoryService) {
-
-            if ($order->status->is(OrderStatus::CONFIRMED)) {
-                $inventoryService->restoreForCancelledOrder($order, auth()->id());
-            }
+            $inventoryService->restoreForCancelledOrder($order, auth()->id());
 
             $order->update([
                 'status' => OrderStatus::CANCELLED,

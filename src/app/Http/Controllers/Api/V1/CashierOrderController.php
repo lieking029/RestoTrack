@@ -12,10 +12,13 @@ class CashierOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['items', 'creator.roles'])->latest();
+        $query = Order::with(['items', 'creator.roles', 'payments'])->latest();
 
         if ($request->has('status')) {
             $query->where('status', $request->integer('status'));
+        } else {
+            // Default: show SERVED (awaiting payment) and COMPLETED orders
+            $query->whereIn('status', [OrderStatus::SERVED, OrderStatus::COMPLETED]);
         }
 
         return OrderResource::collection($query->get());

@@ -18,8 +18,8 @@ class OnlinePaymentController extends Controller
 
         $order = Order::with('items')->findOrFail($data['order_id']);
 
-        if (!$order->status->is(OrderStatus::PENDING)) {
-            abort(422, 'Order cannot be paid.');
+        if (!$order->status->is(OrderStatus::SERVED)) {
+            abort(422, 'Order must be served before payment.');
         }
 
         $lineItems = $order->items->map(function ($item) {
@@ -68,7 +68,7 @@ class OnlinePaymentController extends Controller
     {
         return response()->json([
             'status' => $order->status->value,
-            'is_paid' => $order->status->is(OrderStatus::CONFIRMED),
+            'is_paid' => $order->status->is(OrderStatus::COMPLETED),
         ]);
     }
 }

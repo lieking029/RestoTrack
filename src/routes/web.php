@@ -27,6 +27,8 @@ Route::group([
 ], function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('product/archived', [ProductController::class, 'archived'])->name('product.archived');
+    Route::post('product/{product}/restore', [ProductController::class, 'restore'])->name('product.restore');
     Route::resource('product', ProductController::class);
     Route::resource('user', UserController::class);
     Route::resource('menu', MenuController::class);

@@ -5,15 +5,12 @@ namespace App\Http\Controllers\Api\V1;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Services\InventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PaymongoWebhookController extends Controller
 {
-    public function __construct(public InventoryService $inventoryService)
-    {}
 
     public function handle(Request $request)
     {
@@ -40,13 +37,11 @@ class PaymongoWebhookController extends Controller
             return response()->json(['message' => 'order not found'], 404);
         }
 
-        if (!$order->status->is(OrderStatus::PENDING)) {
-            return response()->json(['message' => 'order already processed'], 200);
+        if (!$order->status->is(OrderStatus::SERVED)) {
+            return response()->json(['message' => 'order not ready for payment'], 200);
         }
 
         DB::transaction(function () use ($order, $paymentData) {
-            $this->inventoryService->deductForPaidOrder($order, $order->created_by);
-
             $paymentMethod = $paymentData['payment_method_used'] ?? 'ONLINE';
             $amount = $paymentData['payment_intent']['attributes']['amount'] ?? 0;
 
@@ -56,7 +51,7 @@ class PaymongoWebhookController extends Controller
                 'processed_by' => $order->created_by,
             ]);
 
-            $order->update(['status' => OrderStatus::CONFIRMED]);
+            $order->update(['status' => OrderStatus::COMPLETED]);
         });
 
         Log::info('PayMongo webhook: order paid', ['order_id' => $orderId]);

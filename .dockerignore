@@ -1,6 +1,8 @@
 .git
 node_modules
+**/node_modules
 vendor
+**/vendor
 storage/logs/*
 storage/framework/cache/*
 storage/framework/sessions/*

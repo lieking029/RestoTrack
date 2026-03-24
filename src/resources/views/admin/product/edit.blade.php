@@ -132,7 +132,7 @@
                                 <input type="date" class="form-control @error('expiration_date') is-invalid @enderror"
                                     id="expiration_date" name="expiration_date"
                                     value="{{ old('expiration_date', $product->expiration_date->format('Y-m-d')) }}"
-                                    min="{{ date('Y-m-d') }}" required>
+                                    required>
                             </div>
                             @error('expiration_date')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

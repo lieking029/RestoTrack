@@ -106,8 +106,7 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->select('products.*');
+        return $model->newQuery()->select('products.*');
     }
 
     /**

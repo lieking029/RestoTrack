@@ -13,7 +13,7 @@ class KitchenController extends Controller
     public function index()
     {
         return OrderResource::collection(
-            Order::whereIn('status', [OrderStatus::CONFIRMED, OrderStatus::INPREPARATION, OrderStatus::READY])
+            Order::whereIn('status', [OrderStatus::PENDING, OrderStatus::INPREPARATION, OrderStatus::READY])
                 ->with(['items', 'creator.roles', 'processor.roles'])
                 ->latest()
                 ->get()

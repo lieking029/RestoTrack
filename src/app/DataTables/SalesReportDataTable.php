@@ -44,9 +44,9 @@ class SalesReportDataTable extends DataTable
                 $badgeClass = match ($order->status->value) {
                     OrderStatus::COMPLETED => 'success',
                     OrderStatus::PENDING => 'warning',
-                    OrderStatus::CONFIRMED => 'info',
                     OrderStatus::INPREPARATION => 'primary',
                     OrderStatus::READY => 'secondary',
+                    OrderStatus::SERVED => 'info',
                     OrderStatus::CANCELLED => 'danger',
                     default => 'secondary'
                 };
@@ -54,9 +54,9 @@ class SalesReportDataTable extends DataTable
                 $icon = match ($order->status->value) {
                     OrderStatus::COMPLETED => '<i class="fas fa-check-circle"></i>',
                     OrderStatus::PENDING => '<i class="fas fa-clock"></i>',
-                    OrderStatus::CONFIRMED => '<i class="fas fa-thumbs-up"></i>',
                     OrderStatus::INPREPARATION => '<i class="fas fa-fire"></i>',
                     OrderStatus::READY => '<i class="fas fa-bell"></i>',
+                    OrderStatus::SERVED => '<i class="fas fa-concierge-bell"></i>',
                     OrderStatus::CANCELLED => '<i class="fas fa-times-circle"></i>',
                     default => ''
                 };
@@ -64,9 +64,9 @@ class SalesReportDataTable extends DataTable
                 $statusLabel = match ($order->status->value) {
                     OrderStatus::COMPLETED => 'Completed',
                     OrderStatus::PENDING => 'Pending',
-                    OrderStatus::CONFIRMED => 'Confirmed',
                     OrderStatus::INPREPARATION => 'In Preparation',
                     OrderStatus::READY => 'Ready',
+                    OrderStatus::SERVED => 'Served',
                     OrderStatus::CANCELLED => 'Cancelled',
                     default => 'Unknown'
                 };
@@ -106,6 +106,7 @@ class SalesReportDataTable extends DataTable
     public function query(Order $model): QueryBuilder
     {
         return $model->newQuery()
+            ->where('status', OrderStatus::COMPLETED)
             ->with(['cashier', 'items'])
             ->select('orders.*');
     }

@@ -19,6 +19,17 @@ class StoreMenuRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('ingredients')) {
+            $filtered = collect($this->ingredients)->filter(function ($ingredient) {
+                return !empty($ingredient['product_id']) || !empty($ingredient['quantity_needed']);
+            })->values()->toArray();
+
+            $this->merge(['ingredients' => $filtered ?: null]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -29,8 +40,8 @@ class StoreMenuRequest extends FormRequest
             'dish_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'nullable',
             'ingredients' => 'nullable|array',
-            'ingredients.*.product_id' => 'required_with:ingredients|exists:products,id',
-            'ingredients.*.quantity_needed' => 'required_with:ingredients|numeric|min:0.01|max:9999.99',
+            'ingredients.*.product_id' => 'required|exists:products,id',
+            'ingredients.*.quantity_needed' => 'required|numeric|min:0.01|max:9999.99',
         ];
     }
 

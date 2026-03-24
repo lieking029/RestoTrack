@@ -19,18 +19,29 @@ class UpdateMenuRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('ingredients')) {
+            $filtered = collect($this->ingredients)->filter(function ($ingredient) {
+                return !empty($ingredient['product_id']) || !empty($ingredient['quantity_needed']);
+            })->values()->toArray();
+
+            $this->merge(['ingredients' => $filtered ?: null]);
+        }
+    }
+
     public function rules(): array
     {
         return [
             'name' => 'required|string|max:255|unique:menus,name,' . $this->menu->id,
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:0|max:999999.99',
-            'category' => 'required|integer|in:0,1,2,3,4', // Appetizer, MainCourse, Dessert, Beverage, Snack
-            'dish_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Optional on update
-            'status' => 'nullable', // Checkbox value
+            'category' => 'required|integer|in:0,1,2,3,4',
+            'dish_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'status' => 'nullable',
             'ingredients' => 'nullable|array',
-            'ingredients.*.product_id' => 'required_with:ingredients|exists:products,id',
-            'ingredients.*.quantity_needed' => 'required_with:ingredients|numeric|min:0.01|max:9999.99',
+            'ingredients.*.product_id' => 'required|exists:products,id',
+            'ingredients.*.quantity_needed' => 'required|numeric|min:0.01|max:9999.99',
         ];
     }
 

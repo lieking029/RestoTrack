@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -204,7 +205,8 @@ class Product extends Model
      */
     public function scopeExpiringSoon($query, int $days = 7)
     {
-        return $query->whereDate('expiration_date', '<=', now()->addDays($days))
+        return $query->where('remaining_stock', '>', 0)
+            ->whereDate('expiration_date', '<=', now()->addDays($days))
             ->whereDate('expiration_date', '>=', now());
     }
 

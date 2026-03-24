@@ -16,7 +16,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => (string) $this->id,
-            'shortId' => substr((string) $this->id, 0, 5),
+            'shortId' => substr((string) $this->id, -4),
             'createdBy' => (string) $this->created_by,
             'processedBy' => $this->processed_by ? (string) $this->processed_by : null,
             'status' => $this->status->value ?? $this->status,

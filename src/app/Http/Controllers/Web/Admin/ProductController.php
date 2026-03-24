@@ -80,17 +80,39 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Archive the specified product (soft delete).
      */
     public function destroy(Product $product)
     {
         if (auth()->user()->isManager()) {
-            abort(403, 'Managers are not allowed to delete products.');
+            abort(403, 'Managers are not allowed to archive products.');
         }
 
         $product->delete();
 
-        alert()->success('Product has been deleted successfully');
+        alert()->success('Product has been archived successfully');
         return redirect()->route('admin.product.index');
+    }
+
+    /**
+     * Display archived products.
+     */
+    public function archived()
+    {
+        $archivedProducts = Product::onlyTrashed()->latest('deleted_at')->get();
+
+        return view('admin.product.archived', compact('archivedProducts'));
+    }
+
+    /**
+     * Restore an archived product.
+     */
+    public function restore(string $id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->restore();
+
+        alert()->success('Product has been restored successfully');
+        return redirect()->route('admin.product.archived');
     }
 }

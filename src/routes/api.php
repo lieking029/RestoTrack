@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/menus', [MenuController::class, 'index']);
             Route::get('/order/my', [OrderController::class, 'my']);
             Route::post('/order', [OrderController::class, 'store']);
-            Route::put('/order/{order}', [OrderController::class, 'complete']);
+            Route::put('/order/{order}/serve', [OrderController::class, 'serve']);
             Route::put('/order/{order}/cancel', [OrderController::class, 'cancel']);
         });
 

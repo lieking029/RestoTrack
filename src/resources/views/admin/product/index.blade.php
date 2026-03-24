@@ -117,6 +117,12 @@
                                 <i class="fas fa-ban"></i> Expired
                             </button>
                         </div>
+
+                        <!-- Archive Page -->
+                        <a href="{{ route('admin.product.archived') }}"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-archive"></i> Archived
+                        </a>
                     </div>
                 </div>
             </div>

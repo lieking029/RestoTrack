@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
@@ -37,6 +38,9 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        // Expired Products
+        $expiredCount = Product::expired()->where('remaining_stock', '>', 0)->count();
+
         // Expiring Soon
         $expiringSoonCount = Product::expiringSoon()->count();
         $expiringProducts = Product::expiringSoon()
@@ -47,8 +51,9 @@ class DashboardController extends Controller
         // Top Selling Items
         $topSellingItems = $this->salesReportService->getTopSellingItems(5);
 
-        // Recent Orders
+        // Recent Orders (completed only, consistent with sales stats)
         $recentOrders = Order::with(['cashier', 'items'])
+            ->where('status', OrderStatus::COMPLETED)
             ->latest()
             ->limit(5)
             ->get();
@@ -66,6 +71,7 @@ class DashboardController extends Controller
             'lowStockCount',
             'outOfStockCount',
             'stockAlerts',
+            'expiredCount',
             'expiringSoonCount',
             'expiringProducts',
             'topSellingItems',

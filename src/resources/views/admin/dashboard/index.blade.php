@@ -7,6 +7,18 @@
             <p class="text-muted">Welcome back! Here's what's happening today.</p>
         </div>
 
+        @if($expiredCount > 0)
+        <div class="alert alert-danger d-flex align-items-center justify-content-between mb-4" role="alert">
+            <div>
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <strong>{{ $expiredCount }} expired product(s)</strong> with remaining stock need to be disposed.
+            </div>
+            <a href="{{ route('admin.waste-management.expiry', ['filter' => 'expired']) }}" class="btn btn-danger btn-sm">
+                Review & Dispose
+            </a>
+        </div>
+        @endif
+
         <!-- Stats Cards -->
         <div class="row mb-4">
             <div class="col-md-3 col-sm-6 mb-3">
@@ -322,7 +334,7 @@
                                             <tr>
                                                 <td>
                                                     <a href="{{ route('admin.sales-report.show', $order->id) }}" class="text-decoration-none">
-                                                        #{{ substr($order->id, 0, 5) }}
+                                                        #{{ substr($order->id, -4) }}
                                                     </a>
                                                     <br>
                                                     <small class="text-muted">{{ $order->created_at->diffForHumans() }}</small>
@@ -338,18 +350,18 @@
                                                         $badgeClass = match ($order->status->value) {
                                                             \App\Enums\OrderStatus::COMPLETED => 'success',
                                                             \App\Enums\OrderStatus::PENDING => 'warning',
-                                                            \App\Enums\OrderStatus::CONFIRMED => 'info',
                                                             \App\Enums\OrderStatus::INPREPARATION => 'primary',
                                                             \App\Enums\OrderStatus::READY => 'secondary',
+                                                            \App\Enums\OrderStatus::SERVED => 'info',
                                                             \App\Enums\OrderStatus::CANCELLED => 'danger',
                                                             default => 'secondary'
                                                         };
                                                         $statusLabel = match ($order->status->value) {
                                                             \App\Enums\OrderStatus::COMPLETED => 'Completed',
                                                             \App\Enums\OrderStatus::PENDING => 'Pending',
-                                                            \App\Enums\OrderStatus::CONFIRMED => 'Confirmed',
                                                             \App\Enums\OrderStatus::INPREPARATION => 'Preparing',
                                                             \App\Enums\OrderStatus::READY => 'Ready',
+                                                            \App\Enums\OrderStatus::SERVED => 'Served',
                                                             \App\Enums\OrderStatus::CANCELLED => 'Cancelled',
                                                             default => 'Unknown'
                                                         };
