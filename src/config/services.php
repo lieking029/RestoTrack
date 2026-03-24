@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'paymongo' => [
+        'url' => env('PAYMONGO_URL', 'https://api.paymongo.com/v1'),
+        'secret_key' => env('PAYMONGO_SECRET_KEY'),
+        'public_key' => env('PAYMONGO_PUBLIC_KEY'),
+    ],
+
 ];

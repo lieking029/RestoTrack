@@ -6,7 +6,9 @@ use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\KitchenController;
 use App\Http\Controllers\Api\V1\MenuController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\OnlinePaymentController;
 use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\PaymongoWebhookController;
 use App\Http\Controllers\Api\V1\SalesReportController;
 use App\Http\Controllers\Api\V1\CashierOrderController;
 use App\Http\Controllers\Api\V1\TransactionController;
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [LoginController::class, 'login']);
 
+
+// PayMongo Webhook (no auth — called by PayMongo)
+Route::post('/paymongo/webhook', [PaymongoWebhookController::class, 'handle']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -45,6 +50,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::middleware('role:cashier')->prefix('cashier')->group(function () {
             Route::get('/orders', [CashierOrderController::class, 'index']);
             Route::post('/payments', PaymentController::class);
+            Route::post('/payments/online', [OnlinePaymentController::class, 'createCheckoutSession']);
+            Route::get('/orders/{order}/payment-status', [OnlinePaymentController::class, 'checkStatus']);
             Route::get('/transactions', TransactionController::class);
         });
 
