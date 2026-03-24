@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{  'Admin - ePickMeUp' }}</title>
+    <title>RestoTrack</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/epickmeup-logo.png') }}">
 
     <link rel="dns-prefetch" href="//fonts.bunny.net">
