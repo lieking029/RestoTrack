@@ -33,9 +33,9 @@ class OrderSeeder extends Seeder
 
         $orderCounts = [
             'pending' => 5,
-            'confirmed' => 5,
             'inPreparation' => 3,
             'ready' => 5,
+            'served' => 5,
             'completed' => 30,
             'cancelled' => 2,
         ];
@@ -44,11 +44,11 @@ class OrderSeeder extends Seeder
         $totalItems = 0;
         $totalPayments = 0;
 
-        // Create COMPLETED orders (historical, with payments)
+        // Create COMPLETED orders (historical, with payments — cashier processed)
         for ($i = 0; $i < $orderCounts['completed']; $i++) {
             $order = $this->createOrderWithItems(
                 $servers->random(),
-                $cashiers->random(),
+                $cashiers->random(), // Cashier who processed payment
                 $menus,
                 OrderStatus::COMPLETED(),
                 fake()->dateTimeBetween('-30 days', '-2 hours')
@@ -68,14 +68,27 @@ class OrderSeeder extends Seeder
             $totalPayments++;
         }
 
-        // Create READY orders (prepared, waiting for pickup)
+        // Create SERVED orders (delivered, awaiting payment)
+        for ($i = 0; $i < $orderCounts['served']; $i++) {
+            $order = $this->createOrderWithItems(
+                $servers->random(),
+                null, // No cashier yet
+                $menus,
+                OrderStatus::SERVED(),
+                fake()->dateTimeBetween('-30 minutes', '-5 minutes')
+            );
+            $totalOrders++;
+            $totalItems += $order->items->count();
+        }
+
+        // Create READY orders (prepared, waiting for server to deliver)
         for ($i = 0; $i < $orderCounts['ready']; $i++) {
             $order = $this->createOrderWithItems(
                 $servers->random(),
-                $cashiers->random(),
+                null,
                 $menus,
                 OrderStatus::READY(),
-                fake()->dateTimeBetween('-30 minutes', '-5 minutes')
+                fake()->dateTimeBetween('-45 minutes', '-10 minutes')
             );
             $totalOrders++;
             $totalItems += $order->items->count();
@@ -85,7 +98,7 @@ class OrderSeeder extends Seeder
         for ($i = 0; $i < $orderCounts['inPreparation']; $i++) {
             $order = $this->createOrderWithItems(
                 $servers->random(),
-                $cashiers->random(),
+                null,
                 $menus,
                 OrderStatus::INPREPARATION(),
                 fake()->dateTimeBetween('-45 minutes', '-15 minutes')
@@ -94,24 +107,11 @@ class OrderSeeder extends Seeder
             $totalItems += $order->items->count();
         }
 
-        // Create CONFIRMED orders (paid, waiting for kitchen)
-        for ($i = 0; $i < $orderCounts['confirmed']; $i++) {
-            $order = $this->createOrderWithItems(
-                $servers->random(),
-                $cashiers->random(),
-                $menus,
-                OrderStatus::CONFIRMED(),
-                fake()->dateTimeBetween('-1 hour', '-30 minutes')
-            );
-            $totalOrders++;
-            $totalItems += $order->items->count();
-        }
-
-        // Create PENDING orders (just created, awaiting payment)
+        // Create PENDING orders (just created, awaiting kitchen)
         for ($i = 0; $i < $orderCounts['pending']; $i++) {
             $order = $this->createOrderWithItems(
                 $servers->random(),
-                null, // No cashier yet for pending
+                null,
                 $menus,
                 OrderStatus::PENDING(),
                 fake()->dateTimeBetween('-2 hours', 'now')
@@ -136,9 +136,9 @@ class OrderSeeder extends Seeder
         $this->command->info("✓ Created {$totalOrders} orders with {$totalItems} items");
         $this->command->info("✓ Created {$totalPayments} payments");
         $this->command->info('  - PENDING: ' . Order::where('status', OrderStatus::PENDING())->count());
-        $this->command->info('  - CONFIRMED: ' . Order::where('status', OrderStatus::CONFIRMED())->count());
         $this->command->info('  - IN PREPARATION: ' . Order::where('status', OrderStatus::INPREPARATION())->count());
         $this->command->info('  - READY: ' . Order::where('status', OrderStatus::READY())->count());
+        $this->command->info('  - SERVED: ' . Order::where('status', OrderStatus::SERVED())->count());
         $this->command->info('  - COMPLETED: ' . Order::where('status', OrderStatus::COMPLETED())->count());
         $this->command->info('  - CANCELLED: ' . Order::where('status', OrderStatus::CANCELLED())->count());
     }
