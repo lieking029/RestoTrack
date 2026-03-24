@@ -49,19 +49,14 @@ class MenuController extends Controller
 
         $menu = Menu::create($validated);
 
-        if ($request->has('ingredients')) {
+        if (!empty($validated['ingredients'])) {
             $ingredients = [];
-            foreach ($request->ingredients as $ingredient) {
-                if (!empty($ingredient['product_id']) && !empty($ingredient['quantity_needed'])) {
-                    $ingredients[$ingredient['product_id']] = [
-                        'quantity_needed' => $ingredient['quantity_needed']
-                    ];
-                }
+            foreach ($validated['ingredients'] as $ingredient) {
+                $ingredients[$ingredient['product_id']] = [
+                    'quantity_needed' => $ingredient['quantity_needed']
+                ];
             }
-            
-            if (!empty($ingredients)) {
-                $menu->products()->attach($ingredients);
-            }
+            $menu->products()->attach($ingredients);
         }
 
         alert()->success('Menu item has been created successfully!');
@@ -114,19 +109,15 @@ class MenuController extends Controller
         $menu->update($validated);
 
         // Sync ingredients
-        if ($request->has('ingredients')) {
+        if (!empty($validated['ingredients'])) {
             $ingredients = [];
-            foreach ($request->ingredients as $ingredient) {
-                if (!empty($ingredient['product_id']) && !empty($ingredient['quantity_needed'])) {
-                    $ingredients[$ingredient['product_id']] = [
-                        'quantity_needed' => $ingredient['quantity_needed']
-                    ];
-                }
+            foreach ($validated['ingredients'] as $ingredient) {
+                $ingredients[$ingredient['product_id']] = [
+                    'quantity_needed' => $ingredient['quantity_needed']
+                ];
             }
-            
             $menu->products()->sync($ingredients);
         } else {
-            // Remove all ingredients if none provided
             $menu->products()->detach();
         }
 

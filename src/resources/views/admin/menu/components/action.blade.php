@@ -45,7 +45,7 @@ function deleteMenu(id, name) {
         if (result.isConfirmed) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = `/admin/menus/${id}`;
+            form.action = `/admin/menu/${id}`;
             
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
