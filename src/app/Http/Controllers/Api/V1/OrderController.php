@@ -73,6 +73,57 @@ class OrderController extends Controller
         });
     }
 
+    public function update(Request $request, Order $order, InventoryService $inventoryService)
+    {
+        if (!$order->status->is(OrderStatus::PENDING)) {
+            abort(422, 'Only pending orders can be edited.');
+        }
+
+        $data = $request->validate([
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.menu_id' => ['required', 'exists:menus,id'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
+        return DB::transaction(function () use ($data, $request, $order, $inventoryService) {
+            // Restore inventory for old items
+            $inventoryService->restoreForCancelledOrder($order, $request->user()->id);
+
+            // Remove old items
+            $order->items()->delete();
+
+            // Add new items
+            $menuIds = collect($data['items'])->pluck('menu_id');
+            $menus = Menu::whereIn('id', $menuIds)->get()->keyBy('id');
+            $subtotal = 0;
+
+            foreach ($data['items'] as $item) {
+                $menu = $menus[$item['menu_id']];
+                $itemTotal = $menu->price * $item['quantity'];
+                $subtotal += $itemTotal;
+
+                $order->items()->create([
+                    'menu_id' => $item['menu_id'],
+                    'name' => $menu->name,
+                    'unit_price' => $menu->price,
+                    'quantity' => $item['quantity'],
+                    'total' => $itemTotal,
+                ]);
+            }
+
+            $order->update([
+                'subtotal' => $subtotal,
+                'tax' => 0,
+                'total' => $subtotal,
+            ]);
+
+            // Deduct inventory for new items
+            $inventoryService->deductForPaidOrder($order->fresh(), $request->user()->id);
+
+            return response()->json($order->fresh('items'));
+        });
+    }
+
     public function serve(Order $order)
     {
         $this->authorize('serve', $order);

@@ -36,10 +36,10 @@ class PaymentController extends Controller
             $discountAmount = 0;
             $discountTotal = $order->total;
 
-            // Apply PWD/Senior discount: 20% off subtotal + VAT exempt
+            // Apply PWD/Senior discount: 20% off subtotal
             if (!empty($data['discount_type'])) {
                 $discountAmount = round($order->subtotal * 0.20, 2);
-                $discountTotal = round($order->subtotal - $discountAmount, 2); // No tax (VAT exempt)
+                $discountTotal = round($order->subtotal - $discountAmount, 2);
 
                 $order->update([
                     'discount_type' => $data['discount_type'],

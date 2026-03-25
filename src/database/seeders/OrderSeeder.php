@@ -184,14 +184,10 @@ class OrderSeeder extends Seeder
             ]);
         }
 
-        // Calculate totals (12% VAT)
-        $tax = round($subtotal * 0.12, 2);
-        $total = $subtotal + $tax;
-
         $order->update([
             'subtotal' => $subtotal,
-            'tax' => $tax,
-            'total' => $total,
+            'tax' => 0,
+            'total' => $subtotal,
         ]);
 
         return $order->load('items');

@@ -55,11 +55,10 @@ class OrderItemSeeder extends Seeder
             }
 
             // Update order totals
-            $tax = round($subtotal * 0.12, 2);
             $order->update([
                 'subtotal' => $subtotal,
-                'tax' => $tax,
-                'total' => $subtotal + $tax,
+                'tax' => 0,
+                'total' => $subtotal,
             ]);
         }
 

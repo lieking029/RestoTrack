@@ -62,10 +62,10 @@
                             @if($order->discount_type)
                             <tr class="table-warning">
                                 <td colspan="3" class="text-end">
-                                    <strong>{{ $order->discount_type }} Discount (20% + VAT Exempt):</strong>
+                                    <strong>{{ $order->discount_type }} Discount (20%):</strong>
                                     <br><small class="text-muted">{{ $order->customer_name }} — ID: {{ $order->id_number }}</small>
                                 </td>
-                                <td class="text-end text-danger">-₱{{ number_format($order->discount_amount + $order->tax, 2) }}</td>
+                                <td class="text-end text-danger">-₱{{ number_format($order->discount_amount, 2) }}</td>
                             </tr>
                             <tr class="table-success">
                                 <td colspan="3" class="text-end"><strong>Final Total:</strong></td>
