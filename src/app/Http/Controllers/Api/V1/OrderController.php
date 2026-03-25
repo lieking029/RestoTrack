@@ -60,11 +60,10 @@ class OrderController extends Controller
                 ]);
             }
 
-            $tax = round($subtotal * 0.12, 2);
             $order->update([
                 'subtotal' => $subtotal,
-                'tax' => $tax,
-                'total' => $subtotal + $tax,
+                'tax' => 0,
+                'total' => $subtotal,
             ]);
 
             // Deduct inventory when order is created (kitchen needs ingredients)

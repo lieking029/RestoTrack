@@ -21,6 +21,11 @@ class Order extends Model
         'subtotal',
         'tax',
         'total',
+        'discount_type',
+        'customer_name',
+        'id_number',
+        'discount_amount',
+        'discount_total',
     ];
 
     protected $casts = [
