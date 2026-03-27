@@ -56,31 +56,6 @@
                             style="background: linear-gradient(135deg, #1a4d2e 0%, #2d7a4e 100%); color: white; padding: 0.9rem; border-radius: 10px; font-weight: 600; border: none; font-size: 1rem; box-shadow: 0 4px 12px rgba(26, 77, 46, 0.2); transition: all 0.3s ease;">
                             Login
                         </button>
-
-                        <!-- <div class="position-relative mb-4">
-                            <hr style="border-color: #e0e0e0;">
-                            <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted"
-                                style="font-size: 0.85rem;">
-                                OR
-                            </span>
-                        </div> -->
-
-                        <!-- <button type="button"
-                            class="btn btn-lg w-100 d-flex align-items-center justify-content-center google-btn"
-                            style="padding: 0.85rem; border-radius: 10px; border: 1.5px solid #dadce0; background-color: white; transition: all 0.3s ease; font-size: 0.95rem;">
-                            <img src="https://www.google.com/favicon.ico" alt="Google"
-                                style="width: 20px; height: 20px; margin-right: 12px;">
-                            <span style="color: #3c4043; font-weight: 500;">Continue with Google</span>
-                        </button> -->
-
-                        <div class="text-center mt-4">
-                            <p class="mb-0" style="color: #6c757d; font-size: 0.9rem;">
-                                Don't have an account?
-                                <a href="#" class="text-decoration-none fw-semibold" style="color: #1a4d2e;">Sign
-                                    up</a>
-                            </p>
-                        </div>
-
                     </div>
                 </form>
             </div>

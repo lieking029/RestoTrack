@@ -176,8 +176,18 @@
     <!-- DataTable Card -->
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-bottom">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <h5 class="mb-0"><i class="fas fa-list"></i> Order History</h5>
+                <div class="d-flex gap-2 flex-wrap">
+                <!-- Export Buttons -->
+                <div class="btn-group" role="group">
+                    <a href="{{ route('admin.export.sales-report.pdf') }}" class="btn btn-sm btn-outline-danger" title="Export to PDF">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                    <a href="{{ route('admin.export.sales-report.excel') }}" class="btn btn-sm btn-outline-success" title="Export to Excel">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </a>
+                </div>
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-sm btn-outline-secondary active" onclick="filterStatus('all')">
                         <i class="fas fa-list"></i> All
@@ -191,6 +201,7 @@
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="filterStatus('5')">
                         <i class="fas fa-times-circle"></i> Cancelled
                     </button>
+                </div>
                 </div>
             </div>
         </div>

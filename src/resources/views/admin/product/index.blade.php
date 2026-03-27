@@ -118,6 +118,16 @@
                             </button>
                         </div>
 
+                        <!-- Export Buttons -->
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('admin.export.products.pdf') }}" class="btn btn-sm btn-outline-danger" title="Export to PDF">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                            <a href="{{ route('admin.export.products.excel') }}" class="btn btn-sm btn-outline-success" title="Export to Excel">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </a>
+                        </div>
+
                         <!-- Archive Page -->
                         <a href="{{ route('admin.product.archived') }}"
                            class="btn btn-sm btn-outline-secondary">

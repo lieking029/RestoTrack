@@ -106,6 +106,16 @@
                         </button>
                     </div>
 
+                    <!-- Export Buttons -->
+                    <div class="btn-group" role="group">
+                        <a href="{{ route('admin.export.menu.pdf') }}" class="btn btn-sm btn-outline-danger" title="Export to PDF">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </a>
+                        <a href="{{ route('admin.export.menu.excel') }}" class="btn btn-sm btn-outline-success" title="Export to Excel">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </a>
+                    </div>
+
                     <!-- Category Filters -->
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-sm btn-outline-info" onclick="filterCategory('0')">

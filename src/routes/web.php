@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Admin\DashboardController;
+use App\Http\Controllers\Web\Admin\ExportController;
 use App\Http\Controllers\Web\Admin\InventoryAlertController;
 use App\Http\Controllers\Web\Admin\WasteManagementController;
 use App\Http\Controllers\Web\Admin\MenuController;
@@ -46,4 +47,12 @@ Route::group([
     Route::post('/waste-management', [WasteManagementController::class, 'store'])->name('waste-management.store');
     Route::post('/waste-management/dispose/{product}', [WasteManagementController::class, 'dispose'])->name('waste-management.dispose');
     Route::post('/waste-management/bulk-dispose', [WasteManagementController::class, 'bulkDispose'])->name('waste-management.bulk-dispose');
+
+    // Exports
+    Route::get('/export/products/pdf', [ExportController::class, 'productsPdf'])->name('export.products.pdf');
+    Route::get('/export/products/excel', [ExportController::class, 'productsExcel'])->name('export.products.excel');
+    Route::get('/export/menu/pdf', [ExportController::class, 'menuPdf'])->name('export.menu.pdf');
+    Route::get('/export/menu/excel', [ExportController::class, 'menuExcel'])->name('export.menu.excel');
+    Route::get('/export/sales-report/pdf', [ExportController::class, 'salesReportPdf'])->name('export.sales-report.pdf');
+    Route::get('/export/sales-report/excel', [ExportController::class, 'salesReportExcel'])->name('export.sales-report.excel');
 });

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Product List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-size: 11px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #1a4d2e;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            color: #1a4d2e;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .export-info {
+            display: flex;
+            margin-bottom: 15px;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .export-info-table {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .export-info-table td {
+            font-size: 10px;
+            color: #555;
+            padding: 2px 0;
+        }
+
+        .export-info-table td:last-child {
+            text-align: right;
+        }
+
+        table.product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.product-table thead th {
+            background-color: #1a4d2e;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #145a32;
+        }
+
+        table.product-table tbody td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        table.product-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        table.product-table tbody tr:hover {
+            background-color: #e8f5e9;
+        }
+
+        .product-name {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .status-on-stock {
+            color: #1a4d2e;
+            font-weight: bold;
+        }
+
+        .status-low-stock {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .status-no-stock {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 9px;
+            color: #999;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .total-row {
+            text-align: right;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 8px;
+            color: #1a4d2e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>RestoTrack - Product List</h1>
+        <p>Inventory Management Report</p>
+    </div>
+
+    <table class="export-info-table">
+        <tr>
+            <td><strong>Exported By:</strong> {{ $exportedBy }}</td>
+            <td><strong>Date Exported:</strong> {{ $exportedAt }}</td>
+        </tr>
+    </table>
+
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 22%;">Product Name</th>
+                <th style="width: 12%;">Initial Stock</th>
+                <th style="width: 12%;">Current Stock</th>
+                <th style="width: 10%;">Unit</th>
+                <th style="width: 13%;">Status</th>
+                <th style="width: 13%;">Expiration Date</th>
+                <th style="width: 13%;">Date Added</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($products as $index => $product)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td class="product-name">{{ $product['name'] }}</td>
+                    <td>{{ $product['initial_stock'] }}</td>
+                    <td>{{ $product['current_stock'] }}</td>
+                    <td>{{ $product['unit'] }}</td>
+                    <td class="{{ $product['status'] === 'OnStock' ? 'status-on-stock' : ($product['status'] === 'LowOnStock' ? 'status-low-stock' : 'status-no-stock') }}">
+                        {{ $product['status'] }}
+                    </td>
+                    <td>{{ $product['expiration_date'] }}</td>
+                    <td>{{ $product['date_added'] }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 20px;">No products found.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <div class="total-row">
+        Total Products: {{ count($products) }}
+    </div>
+
+    <div class="footer">
+        <p>Generated by RestoTrack &mdash; {{ $exportedAt }}</p>
+    </div>
+</body>
+</html>

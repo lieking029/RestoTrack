@@ -147,21 +147,6 @@ class ProductDataTable extends DataTable
                 'serverSide' => true,
             ])
             ->buttons([
-                Button::make('create')
-                    ->text('<i class="fas fa-plus-circle"></i> Add Product')
-                    ->addClass('btn btn-success btn-sm'),
-                Button::make('excel')
-                    ->text('<i class="fas fa-file-excel"></i> Excel')
-                    ->addClass('btn btn-primary btn-sm'),
-                Button::make('csv')
-                    ->text('<i class="fas fa-file-csv"></i> CSV')
-                    ->addClass('btn btn-info btn-sm'),
-                Button::make('pdf')
-                    ->text('<i class="fas fa-file-pdf"></i> PDF')
-                    ->addClass('btn btn-danger btn-sm'),
-                Button::make('print')
-                    ->text('<i class="fas fa-print"></i> Print')
-                    ->addClass('btn btn-secondary btn-sm'),
                 Button::make('reset')
                     ->text('<i class="fas fa-redo"></i> Reset')
                     ->addClass('btn btn-warning btn-sm'),
