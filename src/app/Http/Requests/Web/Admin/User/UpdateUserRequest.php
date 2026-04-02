@@ -27,6 +27,8 @@ class UpdateUserRequest extends FormRequest
             'last_name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
             'password' => ['sometimes', 'nullable', 'string', 'min:8', 'confirmed'],
+            'user_type' => ['sometimes', 'integer', 'in:0,1,2'],
+            'employee_role' => ['required_if:user_type,2', 'nullable', 'string', 'in:cashier,cook,chef,server,barista'],
         ];
     }
 }

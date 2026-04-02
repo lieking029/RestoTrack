@@ -38,6 +38,12 @@
                                 <i class="{{ \App\Enums\UserType::getIcon($user->user_type->value) }}"></i>
                                 {{ $user->user_type->description }}
                             </span>
+                            @if($user->isEmployee() && $user->roles->isNotEmpty())
+                                <span class="badge badge-lg bg-info ms-1">
+                                    <i class="fas fa-user-cog"></i>
+                                    {{ ucfirst($user->roles->first()->name) }}
+                                </span>
+                            @endif
                         </div>
 
                         <div class="row">
@@ -75,6 +81,18 @@
                                     </span>
                                 </h5>
                             </div>
+
+                            @if($user->isEmployee() && $user->roles->isNotEmpty())
+                            <div class="col-md-6 mb-4">
+                                <label class="detail-label">Employee Role</label>
+                                <h5 class="detail-value">
+                                    <span class="badge badge-lg bg-info">
+                                        <i class="fas fa-user-cog"></i>
+                                        {{ ucfirst($user->roles->first()->name) }}
+                                    </span>
+                                </h5>
+                            </div>
+                            @endif
 
                             <div class="col-md-6 mb-4">
                                 <label class="detail-label">Account Status</label>
@@ -183,7 +201,11 @@
                         @else
                             <div class="alert alert-success mb-2">
                                 <i class="fas fa-user"></i> <strong>Employee Access</strong><br>
-                                <small>Can view and update assigned tasks</small>
+                                @if($user->roles->isNotEmpty())
+                                    <small>Assigned as <strong>{{ ucfirst($user->roles->first()->name) }}</strong></small>
+                                @else
+                                    <small>No employee role assigned</small>
+                                @endif
                             </div>
                         @endif
                     </div>

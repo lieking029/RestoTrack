@@ -107,6 +107,28 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-6 mb-4" id="employee_role_container" style="display: none;">
+                            <label for="employee_role" class="form-label">
+                                Employee Role <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                <select class="form-select @error('employee_role') is-invalid @enderror"
+                                    id="employee_role" name="employee_role">
+                                    <option value="">Select employee role</option>
+                                    @foreach ($employeeRoles as $value => $label)
+                                        <option value="{{ $value }}"
+                                            {{ old('employee_role') == $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('employee_role')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="col-md-6 mb-4">
                             <label for="password" class="form-label">
                                 Password <span class="text-danger">*</span>
@@ -281,6 +303,24 @@
                 icon.classList.add('fa-eye');
             }
         }
+
+        const userTypeSelect = document.getElementById('user_type');
+        const employeeRoleContainer = document.getElementById('employee_role_container');
+        const employeeRoleSelect = document.getElementById('employee_role');
+
+        function toggleEmployeeRole() {
+            if (userTypeSelect.value === '2') {
+                employeeRoleContainer.style.display = '';
+                employeeRoleSelect.setAttribute('required', 'required');
+            } else {
+                employeeRoleContainer.style.display = 'none';
+                employeeRoleSelect.removeAttribute('required');
+                employeeRoleSelect.value = '';
+            }
+        }
+
+        userTypeSelect.addEventListener('change', toggleEmployeeRole);
+        toggleEmployeeRole();
 
         document.querySelectorAll('#first_name, #middle_name, #last_name').forEach(field => {
             field.addEventListener('blur', function() {

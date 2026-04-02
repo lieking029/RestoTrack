@@ -109,6 +109,31 @@
                             <small class="text-muted">Current role: <span
                                     class="badge bg-{{ \App\Enums\UserType::getBadgeClass($user->user_type->value) }}">{{ $user->user_type->description }}</span></small>
                         </div>
+
+                        <div class="col-md-6 mb-4" id="employee_role_container" style="display: none;">
+                            <label for="employee_role" class="form-label">
+                                Employee Role <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
+                                <select class="form-select @error('employee_role') is-invalid @enderror"
+                                    id="employee_role" name="employee_role">
+                                    <option value="">Select employee role</option>
+                                    @foreach ($employeeRoles as $value => $label)
+                                        <option value="{{ $value }}"
+                                            {{ old('employee_role', $user->roles->first()?->name) == $value ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('employee_role')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            @if($user->roles->isNotEmpty())
+                                <small class="text-muted">Current role: <span class="badge bg-info">{{ ucfirst($user->roles->first()->name) }}</span></small>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="card bg-light mb-4">
@@ -290,6 +315,24 @@
                 icon.classList.add('fa-eye');
             }
         }
+
+        const userTypeSelect = document.getElementById('user_type');
+        const employeeRoleContainer = document.getElementById('employee_role_container');
+        const employeeRoleSelect = document.getElementById('employee_role');
+
+        function toggleEmployeeRole() {
+            if (userTypeSelect.value === '2') {
+                employeeRoleContainer.style.display = '';
+                employeeRoleSelect.setAttribute('required', 'required');
+            } else {
+                employeeRoleContainer.style.display = 'none';
+                employeeRoleSelect.removeAttribute('required');
+                employeeRoleSelect.value = '';
+            }
+        }
+
+        userTypeSelect.addEventListener('change', toggleEmployeeRole);
+        toggleEmployeeRole();
 
         document.querySelectorAll('#first_name, #middle_name, #last_name').forEach(field => {
             field.addEventListener('blur', function() {

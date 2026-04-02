@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class OnlinePaymentController extends Controller
@@ -14,6 +15,9 @@ class OnlinePaymentController extends Controller
     {
         $data = $request->validate([
             'order_id' => ['required', 'exists:orders,id'],
+            'discount_type' => ['nullable', 'in:PWD,SENIOR'],
+            'customer_name' => ['required_with:discount_type', 'nullable', 'string', 'max:255'],
+            'id_number' => ['required_with:discount_type', 'nullable', 'string', 'max:100'],
         ]);
 
         $order = Order::with('items')->findOrFail($data['order_id']);
@@ -22,15 +26,46 @@ class OnlinePaymentController extends Controller
             abort(422, 'Order must be served before payment.');
         }
 
-        $lineItems = $order->items->map(function ($item) {
-            return [
+        // Apply PWD/Senior discount: 20% off subtotal
+        $discountAmount = 0;
+        $payableTotal = $order->total;
+
+        if (!empty($data['discount_type'])) {
+            $discountAmount = round($order->subtotal * 0.20, 2);
+            $payableTotal = round($order->subtotal - $discountAmount, 2);
+
+            $order->update([
+                'discount_type' => $data['discount_type'],
+                'customer_name' => $data['customer_name'],
+                'id_number' => $data['id_number'],
+                'discount_amount' => $discountAmount,
+                'discount_total' => $payableTotal,
+            ]);
+        }
+
+        $lineItems = [];
+
+        if (!empty($data['discount_type'])) {
+            // Send as a single line item with the discounted total
+            $lineItems[] = [
                 'currency' => 'PHP',
-                'amount' => (int) round($item->unit_price * $item->quantity * 100),
-                'name' => $item->name,
+                'amount' => (int) round($payableTotal * 100),
+                'name' => 'Order #' . $order->id,
                 'quantity' => 1,
-                'description' => $item->name . ' x' . $item->quantity,
+                'description' => 'Order total with ' . $data['discount_type'] . ' discount (20% off)',
             ];
-        })->values()->toArray();
+        } else {
+            // No discount — send individual items
+            $lineItems = $order->items->map(function ($item) {
+                return [
+                    'currency' => 'PHP',
+                    'amount' => (int) round($item->unit_price * $item->quantity * 100),
+                    'name' => $item->name,
+                    'quantity' => 1,
+                    'description' => $item->name . ' x' . $item->quantity,
+                ];
+            })->values()->toArray();
+        }
 
         $url = config('services.paymongo.url');
         $secretKey = config('services.paymongo.secret_key');
@@ -61,6 +96,10 @@ class OnlinePaymentController extends Controller
         return response()->json([
             'checkout_url' => $checkout['data']['attributes']['checkout_url'],
             'checkout_session_id' => $checkout['data']['id'],
+            'discount_type' => $data['discount_type'] ?? null,
+            'discount_amount' => $discountAmount,
+            'original_total' => (float) $order->total,
+            'discount_total' => $payableTotal,
         ]);
     }
 

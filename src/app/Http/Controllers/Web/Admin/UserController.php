@@ -9,6 +9,7 @@ use App\Http\Requests\Web\Admin\User\StoreUserRequest;
 use App\Http\Requests\Web\Admin\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -29,8 +30,14 @@ class UserController extends Controller
             ? [UserType::Employee => UserType::getDescription(UserType::Employee)]
             : UserType::asSelectArray();
 
+        $employeeRoles = Role::whereIn('name', ['cashier', 'cook', 'chef', 'server', 'barista'])
+            ->pluck('name', 'name')
+            ->map(fn ($name) => ucfirst($name))
+            ->toArray();
+
         return view('admin.user.create', [
             'userTypes' => $userTypes,
+            'employeeRoles' => $employeeRoles,
         ]);
     }
 
@@ -44,7 +51,11 @@ class UserController extends Controller
             abort(403, 'Managers can only create Employee accounts.');
         }
 
-        User::create($request->validated());
+        $user = User::create($request->validated());
+
+        if ($request->user_type == UserType::Employee && $request->filled('employee_role')) {
+            $user->assignRole($request->employee_role);
+        }
 
         alert()->success('User has been added successfully');
         return redirect()->route('admin.user.index');
@@ -74,9 +85,15 @@ class UserController extends Controller
             ? [UserType::Employee => UserType::getDescription(UserType::Employee)]
             : UserType::asSelectArray();
 
+        $employeeRoles = Role::whereIn('name', ['cashier', 'cook', 'chef', 'server', 'barista'])
+            ->pluck('name', 'name')
+            ->map(fn ($name) => ucfirst($name))
+            ->toArray();
+
         return view('admin.user.edit', [
             'user' => $user,
             'userTypes' => $userTypes,
+            'employeeRoles' => $employeeRoles,
         ]);
     }
 
@@ -89,7 +106,13 @@ class UserController extends Controller
             $user->update(['password' => $request->password]);
         }
 
-        $user->update($request->except('password'));
+        $user->update($request->except(['password', 'employee_role']));
+
+        if ($request->user_type == UserType::Employee && $request->filled('employee_role')) {
+            $user->syncRoles($request->employee_role);
+        } elseif ($request->user_type != UserType::Employee) {
+            $user->syncRoles([]);
+        }
 
         alert()->success('User has been updated successfully');
         return redirect()->route('admin.user.index');

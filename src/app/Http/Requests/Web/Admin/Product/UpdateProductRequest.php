@@ -6,6 +6,7 @@ use App\Enums\UnitOfMeasurement;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['sometimes', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255', Rule::unique('products', 'name')->ignore($this->product)->whereNull('deleted_at')],
             'initial_stock' => ['sometimes', 'numeric', 'min:0', 'gte:remaining_stock'],
             'remaining_stock' => ['sometimes', 'numeric', 'min:0', 'lte:initial_stock'],
             'stock_out' => ['sometimes', 'numeric', 'min:0'],

@@ -28,6 +28,8 @@ class StoreUserRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8', 'string', 'confirmed'],
+            'user_type' => ['required', 'integer', 'in:0,1,2'],
+            'employee_role' => ['required_if:user_type,2', 'nullable', 'string', 'in:cashier,cook,chef,server,barista'],
         ];
     }
 }
