@@ -11,6 +11,7 @@ use App\Enums\MenuType;
 use App\Enums\MenuStatus;
 use App\Enums\OrderStatus;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -211,12 +212,21 @@ class ExportController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    private function getSalesReportData(): array
+    private function getSalesReportData(?string $startDate = null, ?string $endDate = null): array
     {
-        return Order::with(['items', 'cashier', 'creator'])
+        $query = Order::with(['items', 'cashier', 'creator'])
             ->where('status', OrderStatus::COMPLETED)
-            ->orderBy('created_at', 'desc')
-            ->get()
+            ->orderBy('created_at', 'desc');
+
+        if ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        return $query->get()
             ->map(function (Order $order) {
                 $itemNames = $order->items->map(fn($item) => $item->name . ' x' . $item->quantity)->implode(', ');
 
@@ -244,23 +254,39 @@ class ExportController extends Controller
             })->toArray();
     }
 
-    public function salesReportPdf()
+    public function salesReportPdf(Request $request)
     {
-        $orders = $this->getSalesReportData();
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $orders = $this->getSalesReportData($startDate, $endDate);
         $info = $this->getExportInfo();
+
+        $dateRange = null;
+        if ($startDate && $endDate) {
+            $dateRange = \Carbon\Carbon::parse($startDate)->format('M d, Y') . ' - ' . \Carbon\Carbon::parse($endDate)->format('M d, Y');
+        } elseif ($startDate) {
+            $dateRange = 'From ' . \Carbon\Carbon::parse($startDate)->format('M d, Y');
+        } elseif ($endDate) {
+            $dateRange = 'Until ' . \Carbon\Carbon::parse($endDate)->format('M d, Y');
+        }
 
         $pdf = Pdf::loadView('exports.sales-report-pdf', [
             'orders' => $orders,
             'exportedBy' => $info['exportedBy'],
             'exportedAt' => $info['exportedAt'],
+            'dateRange' => $dateRange,
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('SalesReport_' . date('YmdHis') . '.pdf');
     }
 
-    public function salesReportExcel()
+    public function salesReportExcel(Request $request)
     {
-        $orders = $this->getSalesReportData();
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $orders = $this->getSalesReportData($startDate, $endDate);
         $info = $this->getExportInfo();
         $headers = ['Order ID', 'Date & Time', 'Items', 'Subtotal', 'Tax', 'Total', 'Status', 'Cashier Name', 'Server Name'];
 

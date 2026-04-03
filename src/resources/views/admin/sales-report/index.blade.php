@@ -173,6 +173,35 @@
         </div>
     </div>
 
+    <!-- Date Range Filter -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="fas fa-filter text-primary"></i> Filter by Date Range</h5>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-end g-3">
+                <div class="col-md-4">
+                    <label for="start_date" class="form-label fw-semibold">Start Date</label>
+                    <input type="date" id="start_date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date" class="form-label fw-semibold">End Date</label>
+                    <input type="date" id="end_date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex gap-2">
+                        <button type="button" id="btn-filter-date" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Filter
+                        </button>
+                        <button type="button" id="btn-reset-date" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- DataTable Card -->
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-bottom">
@@ -181,10 +210,10 @@
                 <div class="d-flex gap-2 flex-wrap">
                 <!-- Export Buttons -->
                 <div class="btn-group" role="group">
-                    <a href="{{ route('admin.export.sales-report.pdf') }}" class="btn btn-sm btn-outline-danger" title="Export to PDF">
+                    <a href="{{ route('admin.export.sales-report.pdf') }}" id="export-pdf-btn" class="btn btn-sm btn-outline-danger" title="Export to PDF">
                         <i class="fas fa-file-pdf"></i> PDF
                     </a>
-                    <a href="{{ route('admin.export.sales-report.excel') }}" class="btn btn-sm btn-outline-success" title="Export to Excel">
+                    <a href="{{ route('admin.export.sales-report.excel') }}" id="export-excel-btn" class="btn btn-sm btn-outline-success" title="Export to Excel">
                         <i class="fas fa-file-excel"></i> Excel
                     </a>
                 </div>
@@ -413,6 +442,22 @@
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
+    <script>
+        // Add date range params to DataTable AJAX requests
+        $(document).ready(function() {
+            var table = $('#sales_report_dataTable').DataTable();
+            var originalAjaxData = table.settings()[0].ajax.data;
+
+            table.settings()[0].ajax.data = function(d) {
+                if (typeof originalAjaxData === 'function') {
+                    originalAjaxData(d);
+                }
+                d.start_date = document.getElementById('start_date').value || '';
+                d.end_date = document.getElementById('end_date').value || '';
+            };
+        });
+    </script>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -552,6 +597,53 @@
             });
             event.target.closest('.btn').classList.add('active');
         }
+
+        // Update export button URLs with date range params
+        function updateExportUrls() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const pdfBtn = document.getElementById('export-pdf-btn');
+            const excelBtn = document.getElementById('export-excel-btn');
+            const basePdfUrl = "{{ route('admin.export.sales-report.pdf') }}";
+            const baseExcelUrl = "{{ route('admin.export.sales-report.excel') }}";
+
+            const params = new URLSearchParams();
+            if (startDate) params.set('start_date', startDate);
+            if (endDate) params.set('end_date', endDate);
+
+            const queryString = params.toString();
+            pdfBtn.href = basePdfUrl + (queryString ? '?' + queryString : '');
+            excelBtn.href = baseExcelUrl + (queryString ? '?' + queryString : '');
+        }
+
+        // Date Range Filter for DataTable
+        document.getElementById('btn-filter-date').addEventListener('click', function() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+
+            if (!startDate && !endDate) {
+                Swal.fire('Warning', 'Please select at least one date.', 'warning');
+                return;
+            }
+
+            if (startDate && endDate && startDate > endDate) {
+                Swal.fire('Warning', 'Start date cannot be after end date.', 'warning');
+                return;
+            }
+
+            const table = $('#sales_report_dataTable').DataTable();
+            table.ajax.reload();
+            updateExportUrls();
+        });
+
+        document.getElementById('btn-reset-date').addEventListener('click', function() {
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+
+            const table = $('#sales_report_dataTable').DataTable();
+            table.ajax.reload();
+            updateExportUrls();
+        });
 
         // Initialize tooltips
         document.addEventListener('DOMContentLoaded', function() {

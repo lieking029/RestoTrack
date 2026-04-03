@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -105,10 +106,23 @@ class SalesReportDataTable extends DataTable
      */
     public function query(Order $model): QueryBuilder
     {
-        return $model->newQuery()
+        $query = $model->newQuery()
             ->where('status', OrderStatus::COMPLETED)
             ->with(['cashier', 'items'])
             ->select('orders.*');
+
+        $startDate = request('start_date');
+        $endDate = request('end_date');
+
+        if ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        return $query;
     }
 
     /**

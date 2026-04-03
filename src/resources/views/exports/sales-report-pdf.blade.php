@@ -29,6 +29,9 @@
     <div class="header">
         <h1>RestoTrack - Sales Report</h1>
         <p>Order History Report</p>
+        @if(!empty($dateRange))
+            <p style="font-size: 13px; color: #1a4d2e; font-weight: bold; margin-top: 5px;">Period: {{ $dateRange }}</p>
+        @endif
     </div>
 
     <table class="export-info-table">
