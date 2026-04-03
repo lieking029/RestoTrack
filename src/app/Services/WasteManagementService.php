@@ -25,11 +25,16 @@ class WasteManagementService
         ?string $userId = null,
         ?string $notes = null
     ): void {
-        // Get or create inventory item for this product
+        // Get or create inventory item for this product, keeping stock in sync
         $inventoryItem = InventoryItem::firstOrCreate(
             ['product_id' => $product->id],
             ['stock_quantity' => $product->remaining_stock, 'reorder_level' => 10]
         );
+
+        // Sync inventory item stock with product's remaining stock to prevent mismatch
+        if ($inventoryItem->stock_quantity != $product->remaining_stock) {
+            $inventoryItem->update(['stock_quantity' => $product->remaining_stock]);
+        }
 
         // Build detailed note
         $detailedNote = "Reason: {$reason}";
