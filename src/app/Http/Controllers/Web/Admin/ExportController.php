@@ -214,7 +214,7 @@ class ExportController extends Controller
 
     private function getSalesReportData(?string $startDate = null, ?string $endDate = null): array
     {
-        $query = Order::with(['items', 'cashier', 'creator'])
+        $query = Order::with(['items', 'cashier', 'creator', 'payments'])
             ->where('status', OrderStatus::COMPLETED)
             ->orderBy('created_at', 'desc');
 
@@ -240,6 +240,10 @@ class ExportController extends Controller
                     default => 'Unknown',
                 };
 
+                $paymentMethods = $order->payments->pluck('method')->unique()->map(fn($m) => ucfirst($m))->implode(', ');
+
+                $customerType = $order->discount_type ? strtoupper($order->discount_type) : 'Regular';
+
                 return [
                     'order_id' => $order->id,
                     'date_time' => $order->created_at->format('M d, Y h:i A'),
@@ -247,6 +251,8 @@ class ExportController extends Controller
                     'subtotal' => '₱' . number_format($order->subtotal, 2),
                     'tax' => '₱' . number_format($order->tax, 2),
                     'total' => '₱' . number_format($order->total, 2),
+                    'payment_type' => $paymentMethods ?: '-',
+                    'customer_type' => $customerType,
                     'status' => $statusLabel,
                     'cashier_name' => $order->cashier ? $order->cashier->full_name : '-',
                     'server_name' => $order->creator ? $order->creator->full_name : '-',
@@ -288,7 +294,7 @@ class ExportController extends Controller
 
         $orders = $this->getSalesReportData($startDate, $endDate);
         $info = $this->getExportInfo();
-        $headers = ['Order ID', 'Date & Time', 'Items', 'Subtotal', 'Tax', 'Total', 'Status', 'Cashier Name', 'Server Name'];
+        $headers = ['Order ID', 'Date & Time', 'Items', 'Subtotal', 'Tax', 'Total', 'Payment Type', 'Customer Type', 'Status', 'Cashier Name', 'Server Name'];
 
         $spreadsheet = $this->buildExcelSheet('Sales Report', $headers, $orders, $info['exportedBy'], $info['exportedAt']);
 

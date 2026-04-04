@@ -16,11 +16,19 @@ class InventoryService
             $menu = $orderItem->menu;
 
             foreach ($menu->products as $product) {
-                $requiredQty = (int) ceil($product->pivot->quantity_needed * $orderItem->quantity);
+                $requiredQty = $product->pivot->quantity_needed * $orderItem->quantity;
 
                 $inventory = InventoryItem::where('product_id', $product->id)
                     ->lockForUpdate()
-                    ->firstOrFail();
+                    ->first();
+
+                if (!$inventory) {
+                    $inventory = InventoryItem::create([
+                        'product_id' => $product->id,
+                        'stock_quantity' => $product->remaining_stock ?? 0,
+                        'reorder_level' => 0,
+                    ]);
+                }
 
                 if ($inventory->stock_quantity < $requiredQty) {
                     abort(422, "Insufficient stock for ingredient: {$product->name}");
@@ -52,7 +60,7 @@ class InventoryService
             $menu = $orderItem->menu;
 
             foreach ($menu->products as $product) {
-                $restoreQty = (int) ceil($product->pivot->quantity_needed * $orderItem->quantity);
+                $restoreQty = $product->pivot->quantity_needed * $orderItem->quantity;
 
                 $inventory = InventoryItem::where('product_id', $product->id)
                     ->lockForUpdate()

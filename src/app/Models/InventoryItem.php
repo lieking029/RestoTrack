@@ -20,6 +20,11 @@ class InventoryItem extends Model
         'reorder_level',
     ];
 
+    protected $casts = [
+        'stock_quantity' => 'decimal:2',
+        'reorder_level' => 'decimal:2',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);

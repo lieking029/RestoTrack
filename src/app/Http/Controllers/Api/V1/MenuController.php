@@ -10,11 +10,9 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::available()
-            ->with('products')
+        $menus = Menu::with('products')
             ->latest()
-            ->get()
-            ->filter(fn ($menu) => $menu->hasIngredientsInStock());
+            ->get();
 
         return MenuResource::collection($menus);
     }

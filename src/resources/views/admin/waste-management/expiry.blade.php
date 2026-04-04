@@ -87,7 +87,10 @@
     </div>
 
     <!-- Bulk Actions for Expired -->
-    @if($filter === 'expired' && $products->count() > 0)
+    @php
+        $undisposedProducts = $filter === 'expired' ? $products->where('remaining_stock', '>', 0) : collect();
+    @endphp
+    @if($filter === 'expired' && $undisposedProducts->count() > 0)
         <div class="card border-0 shadow-sm mb-4 bg-danger-subtle">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
@@ -96,11 +99,11 @@
                 </div>
                 <form action="{{ route('admin.waste-management.bulk-dispose') }}" method="POST" id="bulkDisposeForm">
                     @csrf
-                    @foreach($products as $product)
+                    @foreach($undisposedProducts as $product)
                         <input type="hidden" name="product_ids[]" value="{{ $product->id }}">
                     @endforeach
                     <button type="button" class="btn btn-danger" onclick="confirmBulkDispose()">
-                        <i class="fas fa-trash-alt"></i> Dispose All ({{ $products->count() }})
+                        <i class="fas fa-trash-alt"></i> Dispose All ({{ $undisposedProducts->count() }})
                     </button>
                 </form>
             </div>
@@ -149,7 +152,11 @@
                                         {{ $product->expiration_date->format('M d, Y') }}
                                     </td>
                                     <td class="text-center">
-                                        @if($isExpired)
+                                        @if($isExpired && $product->remaining_stock <= 0)
+                                            <span class="badge bg-dark">
+                                                <i class="fas fa-check-circle"></i> Disposed
+                                            </span>
+                                        @elseif($isExpired)
                                             <span class="badge bg-danger">
                                                 <i class="fas fa-skull-crossbones"></i> Expired ({{ abs($daysLeft) }} days ago)
                                             </span>
@@ -177,7 +184,13 @@
                                                class="btn btn-sm btn-outline-primary" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            @if($isExpired || $daysLeft <= 0)
+                                            @if($isExpired && $product->remaining_stock <= 0)
+                                                <button type="button" class="btn btn-sm btn-dark"
+                                                        onclick="confirmPermanentDelete('{{ $product->id }}', '{{ $product->name }}')"
+                                                        title="Permanent Delete">
+                                                    <i class="fas fa-skull-crossbones"></i>
+                                                </button>
+                                            @elseif($isExpired || $daysLeft <= 0)
                                                 <button type="button" class="btn btn-sm btn-danger"
                                                         onclick="confirmDispose('{{ $product->id }}', '{{ $product->name }}')"
                                                         title="Dispose">
@@ -210,6 +223,12 @@
 <!-- Dispose Form (Hidden) -->
 <form id="disposeForm" action="" method="POST" style="display: none;">
     @csrf
+</form>
+
+<!-- Permanent Delete Form (Hidden) -->
+<form id="permanentDeleteForm" action="" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
 </form>
 
 <style>
@@ -355,6 +374,25 @@
             if (result.isConfirmed) {
                 const form = document.getElementById('disposeForm');
                 form.action = `/admin/waste-management/dispose/${productId}`;
+                form.submit();
+            }
+        });
+    }
+
+    function confirmPermanentDelete(productId, productName) {
+        Swal.fire({
+            title: 'Permanently Delete?',
+            html: `Are you sure you want to permanently delete <strong>${productName}</strong>?<br><small class="text-danger">This action cannot be undone. The product and all its related records will be removed forever.</small>`,
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#212529',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-skull-crossbones"></i> Yes, Delete Permanently',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('permanentDeleteForm');
+                form.action = `/admin/waste-management/permanent-delete/${productId}`;
                 form.submit();
             }
         });

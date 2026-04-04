@@ -20,7 +20,7 @@ class WasteManagementService
      */
     public function logWaste(
         Product $product,
-        int $quantity,
+        float $quantity,
         string $reason,
         ?string $userId = null,
         ?string $notes = null
@@ -195,8 +195,8 @@ class WasteManagementService
      */
     public function getExpiredProducts(): Collection
     {
-        return Product::where('remaining_stock', '>', 0)
-            ->whereDate('expiration_date', '<', now())
+        return Product::whereDate('expiration_date', '<', now())
+            ->orderBy('remaining_stock', 'desc')
             ->orderBy('expiration_date')
             ->get();
     }

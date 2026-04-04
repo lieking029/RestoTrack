@@ -21,6 +21,10 @@ class InventoryMovement extends Model
         'note',
     ];
 
+    protected $casts = [
+        'quantity' => 'decimal:2',
+    ];
+
     public function inventoryItem()
     {
         return $this->belongsTo(InventoryItem::class);

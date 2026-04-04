@@ -47,6 +47,7 @@ Route::group([
     Route::post('/waste-management', [WasteManagementController::class, 'store'])->name('waste-management.store');
     Route::post('/waste-management/dispose/{product}', [WasteManagementController::class, 'dispose'])->name('waste-management.dispose');
     Route::post('/waste-management/bulk-dispose', [WasteManagementController::class, 'bulkDispose'])->name('waste-management.bulk-dispose');
+    Route::delete('/waste-management/permanent-delete/{product}', [WasteManagementController::class, 'permanentDelete'])->name('waste-management.permanent-delete');
 
     // Exports
     Route::get('/export/products/pdf', [ExportController::class, 'productsPdf'])->name('export.products.pdf');

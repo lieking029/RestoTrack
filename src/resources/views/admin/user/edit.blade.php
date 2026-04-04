@@ -163,7 +163,7 @@
                                     @error('password')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
-                                    <small class="text-muted">Minimum 8 characters</small>
+                                    <small class="text-muted">Must contain uppercase, lowercase, number, and symbol (min. 8 characters)</small>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -335,9 +335,33 @@
         toggleEmployeeRole();
 
         document.querySelectorAll('#first_name, #middle_name, #last_name').forEach(field => {
+            field.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z\s\-\.]/g, '');
+            });
             field.addEventListener('blur', function() {
                 this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
             });
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            if (!password) {
+                this.classList.remove('is-invalid', 'is-valid');
+                return;
+            }
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSymbol = /[\W_]/.test(password);
+            const hasLength = password.length >= 8;
+
+            if (hasUpper && hasLower && hasNumber && hasSymbol && hasLength) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+            }
         });
 
         document.getElementById('password_confirmation').addEventListener('input', function() {

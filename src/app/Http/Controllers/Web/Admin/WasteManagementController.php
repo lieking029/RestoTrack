@@ -158,4 +158,32 @@ class WasteManagementController extends Controller
         alert()->success("Successfully disposed {$count} expired product(s)");
         return redirect()->route('admin.waste-management.expiry', ['filter' => 'expired']);
     }
+
+    /**
+     * Permanently delete an expired product.
+     */
+    public function permanentDelete(Product $product)
+    {
+        if (auth()->user()->isManager()) {
+            abort(403, 'Managers are not allowed to permanently delete products.');
+        }
+
+        $productName = $product->name;
+
+        // Delete related inventory items and movements
+        $inventoryItem = $product->inventoryItem;
+        if ($inventoryItem) {
+            $inventoryItem->movements()->delete();
+            $inventoryItem->delete();
+        }
+
+        // Detach from menus
+        $product->menus()->detach();
+
+        // Force delete the product
+        $product->forceDelete();
+
+        alert()->success("Permanently deleted {$productName}");
+        return redirect()->route('admin.waste-management.expiry', ['filter' => 'expired']);
+    }
 }

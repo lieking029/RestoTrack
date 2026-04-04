@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class InventoryOpsService
 {
-    public function receive(InventoryItem $item, int $qty, ?string $userId, ?string $note = null): void
+    public function receive(InventoryItem $item, float $qty, ?string $userId, ?string $note = null): void
     {
         DB::transaction(function () use ($item, $qty, $userId, $note) {
             $locked = InventoryItem::whereKey($item->id)->lockForUpdate()->firstOrFail();
@@ -30,7 +30,7 @@ class InventoryOpsService
         });
     }
 
-    public function waste(InventoryItem $item, int $qty, ?string $userId, ?string $note = null): void
+    public function waste(InventoryItem $item, float $qty, ?string $userId, ?string $note = null): void
     {
         DB::transaction(function () use ($item, $qty, $userId, $note) {
             $locked = InventoryItem::whereKey($item->id)->lockForUpdate()->firstOrFail();
@@ -56,15 +56,15 @@ class InventoryOpsService
         });
     }
 
-    public function adjustTo(InventoryItem $item, int $newQty, ?string $userId, ?string $note = null): void
+    public function adjustTo(InventoryItem $item, float $newQty, ?string $userId, ?string $note = null): void
     {
         DB::transaction(function () use ($item, $newQty, $userId, $note) {
             $locked = InventoryItem::whereKey($item->id)->lockForUpdate()->firstOrFail();
 
-            $current = (int) $locked->stock_quantity;
+            $current = (float) $locked->stock_quantity;
             $diff = $newQty - $current;
 
-            if ($diff === 0) {
+            if (abs($diff) < 0.001) {
                 return;
             }
 

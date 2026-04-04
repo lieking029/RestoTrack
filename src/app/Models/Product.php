@@ -8,11 +8,22 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
+
+    protected static function booted(): void
+    {
+        static::created(function (Product $product) {
+            $product->inventoryItem()->create([
+                'stock_quantity' => $product->remaining_stock ?? $product->initial_stock,
+                'reorder_level' => 0,
+            ]);
+        });
+    }
 
     protected $fillable = [
         'name',
@@ -28,9 +39,9 @@ class Product extends Model
         'unit_of_measurement' => UnitOfMeasurement::class,
         'status' => InventoryStatus::class,
         'expiration_date' => 'date',
-        'initial_stock' => 'integer',
-        'stock_out' => 'integer',
-        'remaining_stock' => 'integer',
+        'initial_stock' => 'decimal:2',
+        'stock_out' => 'decimal:2',
+        'remaining_stock' => 'decimal:2',
     ];
 
     /*
@@ -129,7 +140,7 @@ class Product extends Model
     /**
      * Update the stock and recalculate status.
      */
-    public function updateStock(int $quantity, bool $isAddition = false): void
+    public function updateStock(float $quantity, bool $isAddition = false): void
     {
         if ($isAddition) {
             $this->remaining_stock += $quantity;
@@ -148,7 +159,7 @@ class Product extends Model
      */
     public function calculateStatus(): InventoryStatus
     {
-        $lowStockThreshold = (int) ($this->initial_stock * 0.2);
+        $lowStockThreshold = $this->initial_stock * 0.2;
 
         if ($this->remaining_stock == 0) {
             return InventoryStatus::NoStock();
