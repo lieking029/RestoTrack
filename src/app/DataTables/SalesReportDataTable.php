@@ -35,6 +35,18 @@ class SalesReportDataTable extends DataTable
             ->editColumn('total', function (Order $order) {
                 return '<span class="badge bg-success fs-6">₱' . number_format($order->total, 2) . '</span>';
             })
+            ->addColumn('discount', function (Order $order) {
+                if ($order->discount_amount > 0) {
+                    return '<span class="text-danger">-₱' . number_format($order->discount_amount, 2) . '</span>'
+                        . '<br><small class="text-muted">' . $order->discount_type . '</small>';
+                }
+                return '<span class="text-muted">-</span>';
+            })
+            ->addColumn('amount_paid', function (Order $order) {
+                $paid = $order->discount_total ?? $order->total;
+                $class = $order->discount_amount > 0 ? 'bg-warning text-dark' : 'bg-success';
+                return '<span class="badge ' . $class . ' fs-6">₱' . number_format($paid, 2) . '</span>';
+            })
             ->editColumn('subtotal', function (Order $order) {
                 return '<span class="text-muted">₱' . number_format($order->subtotal, 2) . '</span>';
             })
@@ -96,7 +108,7 @@ class SalesReportDataTable extends DataTable
                     $query->whereDate('created_at', $keyword);
                 }
             })
-            ->rawColumns(['created_at', 'total', 'subtotal', 'tax', 'status', 'cashier_name', 'items_count', 'actions']);
+            ->rawColumns(['created_at', 'total', 'subtotal', 'tax', 'discount', 'amount_paid', 'status', 'cashier_name', 'items_count', 'actions']);
     }
 
     /**
@@ -196,6 +208,14 @@ class SalesReportDataTable extends DataTable
                 ->width(80),
             Column::make('total')
                 ->title('Total')
+                ->addClass('text-end align-middle')
+                ->width(100),
+            Column::computed('discount')
+                ->title('Discount')
+                ->addClass('text-end align-middle')
+                ->width(100),
+            Column::computed('amount_paid')
+                ->title('Amount Paid')
                 ->addClass('text-end align-middle')
                 ->width(120),
             Column::make('status')

@@ -27,6 +27,7 @@ class SalesReportController extends Controller
             'weekly_sales' => (float) $quickStats->weekly_sales,
             'monthly_sales' => (float) $quickStats->monthly_sales,
             'total_orders' => (int) $quickStats->total_orders,
+            'total_discounts' => (float) $quickStats->total_discounts,
             'top_selling_items' => $this->salesReportService->getTopSellingItems(5, $startDate, $endDate),
             'least_selling_items' => $this->salesReportService->getLeastSellingItems(5, $startDate, $endDate),
             'daily_chart' => $this->salesReportService->getDailySalesChart(),

@@ -244,6 +244,8 @@ class ExportController extends Controller
 
                 $customerType = $order->discount_type ? strtoupper($order->discount_type) : 'Regular';
 
+                $amountPaid = $order->discount_total ?? $order->total;
+
                 return [
                     'order_id' => $order->id,
                     'date_time' => $order->created_at->format('M d, Y h:i A'),
@@ -251,6 +253,8 @@ class ExportController extends Controller
                     'subtotal' => '₱' . number_format($order->subtotal, 2),
                     'tax' => '₱' . number_format($order->tax, 2),
                     'total' => '₱' . number_format($order->total, 2),
+                    'discount' => $order->discount_amount > 0 ? '-₱' . number_format($order->discount_amount, 2) . ' (' . $order->discount_type . ')' : '-',
+                    'amount_paid' => '₱' . number_format($amountPaid, 2),
                     'payment_type' => $paymentMethods ?: '-',
                     'customer_type' => $customerType,
                     'status' => $statusLabel,
@@ -294,7 +298,7 @@ class ExportController extends Controller
 
         $orders = $this->getSalesReportData($startDate, $endDate);
         $info = $this->getExportInfo();
-        $headers = ['Order ID', 'Date & Time', 'Items', 'Subtotal', 'Tax', 'Total', 'Payment Type', 'Customer Type', 'Status', 'Cashier Name', 'Server Name'];
+        $headers = ['Order ID', 'Date & Time', 'Items', 'Subtotal', 'Tax', 'Total', 'Discount', 'Amount Paid', 'Payment Type', 'Customer Type', 'Status', 'Cashier Name', 'Server Name'];
 
         $spreadsheet = $this->buildExcelSheet('Sales Report', $headers, $orders, $info['exportedBy'], $info['exportedAt']);
 

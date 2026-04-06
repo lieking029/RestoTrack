@@ -14,8 +14,8 @@
     </div>
 
     <!-- Quick Stats -->
-    <div class="row mb-4">
-        <div class="col-md-3">
+    <div class="row mb-4 g-3">
+        <div class="col-md-3 col-lg">
             <div class="stat-card stat-primary">
                 <div class="stat-icon">
                     <i class="fas fa-receipt"></i>
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg">
             <div class="stat-card stat-success">
                 <div class="stat-icon">
                     <i class="fas fa-calendar-day"></i>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg">
             <div class="stat-card stat-info">
                 <div class="stat-icon">
                     <i class="fas fa-calendar-week"></i>
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg">
             <div class="stat-card stat-warning">
                 <div class="stat-icon">
                     <i class="fas fa-calendar-alt"></i>
@@ -56,6 +56,17 @@
                 <div class="stat-info">
                     <h3>₱{{ number_format($monthlySales, 2) }}</h3>
                     <p>Monthly Sales</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg">
+            <div class="stat-card stat-danger">
+                <div class="stat-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>₱{{ number_format($totalDiscounts, 2) }}</h3>
+                    <p>Total Discounts</p>
                 </div>
             </div>
         </div>
@@ -297,6 +308,10 @@
 
     .stat-warning .stat-icon {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-danger .stat-icon {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     }
 
     .stat-info h3 {
@@ -586,9 +601,9 @@
             const table = $('#sales_report_dataTable').DataTable();
 
             if (status === 'all') {
-                table.column(5).search('').draw(); // Column 5 is status
+                table.column(7).search('').draw(); // Column 7 is status
             } else {
-                table.column(5).search(status).draw();
+                table.column(7).search(status).draw();
             }
 
             // Update active button styling

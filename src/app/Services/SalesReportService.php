@@ -24,13 +24,22 @@ class SalesReportService
             $query->whereDate('created_at', '<=', $endDate);
         }
 
-        $result = $query->selectRaw('COUNT(*) as total_orders, COALESCE(SUM(total), 0) as total_revenue, COALESCE(SUM(tax), 0) as total_tax, COALESCE(AVG(total), 0) as average_order_value')->first();
+        $result = $query->selectRaw('
+            COUNT(*) as total_orders,
+            COALESCE(SUM(total), 0) as total_revenue,
+            COALESCE(SUM(tax), 0) as total_tax,
+            COALESCE(AVG(total), 0) as average_order_value,
+            COALESCE(SUM(COALESCE(discount_amount, 0)), 0) as total_discounts,
+            COALESCE(SUM(COALESCE(discount_total, total)), 0) as total_amount_paid
+        ')->first();
 
         return [
             'total_orders' => (int) $result->total_orders,
             'total_revenue' => (float) $result->total_revenue,
             'total_tax' => (float) $result->total_tax,
             'average_order_value' => (float) $result->average_order_value,
+            'total_discounts' => (float) $result->total_discounts,
+            'total_amount_paid' => (float) $result->total_amount_paid,
         ];
     }
 
@@ -47,10 +56,11 @@ class SalesReportService
 
         return Order::where('status', OrderStatus::COMPLETED)
             ->selectRaw("
-                COALESCE(SUM(CASE WHEN DATE(created_at) = ? THEN total ELSE 0 END), 0) as today_sales,
-                COALESCE(SUM(CASE WHEN created_at BETWEEN ? AND ? THEN total ELSE 0 END), 0) as weekly_sales,
-                COALESCE(SUM(CASE WHEN EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? THEN total ELSE 0 END), 0) as monthly_sales,
-                COUNT(*) as total_orders
+                COALESCE(SUM(CASE WHEN DATE(created_at) = ? THEN COALESCE(discount_total, total) ELSE 0 END), 0) as today_sales,
+                COALESCE(SUM(CASE WHEN created_at BETWEEN ? AND ? THEN COALESCE(discount_total, total) ELSE 0 END), 0) as weekly_sales,
+                COALESCE(SUM(CASE WHEN EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? THEN COALESCE(discount_total, total) ELSE 0 END), 0) as monthly_sales,
+                COUNT(*) as total_orders,
+                COALESCE(SUM(COALESCE(discount_amount, 0)), 0) as total_discounts
             ", [$today, $weekStart, $weekEnd, $month, $year])
             ->first();
     }
@@ -105,7 +115,7 @@ class SalesReportService
             ->where('created_at', '>=', Carbon::now()->subDays($days))
             ->select(
                 DB::raw('DATE(created_at) as date'),
-                DB::raw('SUM(total) as total'),
+                DB::raw('SUM(COALESCE(discount_total, total)) as total'),
                 DB::raw('COUNT(*) as orders')
             )
             ->groupBy('date')
@@ -141,7 +151,7 @@ class SalesReportService
             ->whereDate('created_at', Carbon::today())
             ->select(
                 DB::raw('EXTRACT(HOUR FROM created_at) as hour'),
-                DB::raw('SUM(total) as total'),
+                DB::raw('SUM(COALESCE(discount_total, total)) as total'),
                 DB::raw('COUNT(*) as orders')
             )
             ->groupBy('hour')
@@ -177,7 +187,7 @@ class SalesReportService
             ->whereBetween('created_at', [$thisWeekStart, $thisWeekEnd])
             ->select(
                 DB::raw('EXTRACT(DOW FROM created_at) as day'),
-                DB::raw('SUM(total) as total')
+                DB::raw('SUM(COALESCE(discount_total, total)) as total')
             )
             ->groupBy('day')
             ->pluck('total', 'day')
@@ -187,7 +197,7 @@ class SalesReportService
             ->whereBetween('created_at', [$lastWeekStart, $lastWeekEnd])
             ->select(
                 DB::raw('EXTRACT(DOW FROM created_at) as day'),
-                DB::raw('SUM(total) as total')
+                DB::raw('SUM(COALESCE(discount_total, total)) as total')
             )
             ->groupBy('day')
             ->pluck('total', 'day')

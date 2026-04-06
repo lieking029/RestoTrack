@@ -45,16 +45,18 @@
         <thead>
             <tr>
                 <th style="width: 3%;">#</th>
-                <th style="width: 10%;">Date & Time</th>
-                <th style="width: 17%;">Items</th>
-                <th style="width: 8%;">Subtotal</th>
-                <th style="width: 7%;">Tax</th>
-                <th style="width: 8%;">Total</th>
-                <th style="width: 9%;">Payment Type</th>
-                <th style="width: 9%;">Customer Type</th>
-                <th style="width: 8%;">Status</th>
-                <th style="width: 10%;">Cashier Name</th>
-                <th style="width: 11%;">Server Name</th>
+                <th style="width: 9%;">Date & Time</th>
+                <th style="width: 14%;">Items</th>
+                <th style="width: 7%;">Subtotal</th>
+                <th style="width: 6%;">Tax</th>
+                <th style="width: 7%;">Total</th>
+                <th style="width: 7%;">Discount</th>
+                <th style="width: 7%;">Amount Paid</th>
+                <th style="width: 7%;">Payment Type</th>
+                <th style="width: 8%;">Customer Type</th>
+                <th style="width: 7%;">Status</th>
+                <th style="width: 9%;">Cashier</th>
+                <th style="width: 9%;">Server</th>
             </tr>
         </thead>
         <tbody>
@@ -65,7 +67,9 @@
                     <td class="items-cell">{{ $order['items'] }}</td>
                     <td>{{ $order['subtotal'] }}</td>
                     <td>{{ $order['tax'] }}</td>
-                    <td><strong>{{ $order['total'] }}</strong></td>
+                    <td>{{ $order['total'] }}</td>
+                    <td style="color: {{ $order['discount'] !== '-' ? '#e74c3c' : '#333' }};">{{ $order['discount'] }}</td>
+                    <td><strong>{{ $order['amount_paid'] }}</strong></td>
                     <td>{{ $order['payment_type'] }}</td>
                     <td>{{ $order['customer_type'] }}</td>
                     <td class="{{ $order['status'] === 'Completed' ? 'status-completed' : ($order['status'] === 'Cancelled' ? 'status-cancelled' : 'status-pending') }}">
@@ -76,7 +80,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="11" style="text-align: center; padding: 20px;">No orders found.</td>
+                    <td colspan="13" style="text-align: center; padding: 20px;">No orders found.</td>
                 </tr>
             @endforelse
         </tbody>
