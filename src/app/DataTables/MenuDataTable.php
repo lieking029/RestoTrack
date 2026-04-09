@@ -50,9 +50,19 @@ class MenuDataTable extends DataTable
                 return '<span class="badge bg-' . $badgeClass . '"><i class="' . $icon . '"></i> ' . $menu->category->description . '</span>';
             })
             ->editColumn('status', function (Menu $menu) {
+                // Re-evaluate availability based on current ingredient stock.
+                // If even one ingredient is below the required quantity, mark unavailable.
+                $shouldBeAvailable = $menu->products->isNotEmpty() && $menu->hasIngredientsInStock();
+                $desiredStatus = $shouldBeAvailable ? MenuStatus::Available : MenuStatus::Unavailable;
+
+                if ($menu->status->value !== $desiredStatus) {
+                    $menu->status = $desiredStatus;
+                    $menu->saveQuietly();
+                }
+
                 $icon = MenuStatus::getIcon($menu->status->value);
                 $badgeClass = MenuStatus::getBadgeClass($menu->status->value);
-                
+
                 return '<span class="badge bg-' . $badgeClass . '"><i class="' . $icon . '"></i> ' . $menu->status->description . '</span>';
             })
             ->editColumn('created_at', function (Menu $menu) {
@@ -84,6 +94,7 @@ class MenuDataTable extends DataTable
     public function query(Menu $model): QueryBuilder
     {
         return $model->newQuery()
+            ->with('products')
             ->select('menus.*');
     }
 

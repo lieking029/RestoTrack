@@ -30,6 +30,7 @@ Route::group([
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('product/archived', [ProductController::class, 'archived'])->name('product.archived');
     Route::post('product/{product}/restore', [ProductController::class, 'restore'])->name('product.restore');
+    Route::delete('product/{product}/force-delete', [ProductController::class, 'forceDelete'])->name('product.force-delete');
     Route::resource('product', ProductController::class);
     Route::resource('user', UserController::class);
     Route::resource('menu', MenuController::class);

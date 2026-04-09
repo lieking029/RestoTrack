@@ -115,4 +115,20 @@ class ProductController extends Controller
         alert()->success('Product has been restored successfully');
         return redirect()->route('admin.product.archived');
     }
+
+    /**
+     * Permanently delete an archived product.
+     */
+    public function forceDelete(string $id)
+    {
+        if (auth()->user()->isManager()) {
+            abort(403, 'Managers are not allowed to permanently delete products.');
+        }
+
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->forceDelete();
+
+        alert()->success('Product has been permanently deleted');
+        return redirect()->route('admin.product.archived');
+    }
 }

@@ -46,7 +46,15 @@ class UserDataTable extends DataTable
                     default => ''
                 };
 
-                return '<span class="badge bg-' . $badgeClass . '">' . $icon . ' ' . $user->user_type->description . '</span>';
+                $label = $user->user_type->description;
+                if ($user->user_type->value == UserType::Employee) {
+                    $employeeRole = $user->roles->first();
+                    if ($employeeRole) {
+                        $label = ucfirst($employeeRole->name);
+                    }
+                }
+
+                return '<span class="badge bg-' . $badgeClass . '">' . $icon . ' ' . e($label) . '</span>';
             })
             ->editColumn('created_at', function (User $user) {
                 return '<small class="text-muted">
@@ -71,6 +79,7 @@ class UserDataTable extends DataTable
     public function query(User $model): QueryBuilder
     {
         return $model->newQuery()
+            ->with('roles')
             ->select('users.*');
     }
 

@@ -88,6 +88,12 @@
                                                     onclick="restoreProduct('{{ $product->id }}', '{{ $product->name }}')">
                                                 <i class="fas fa-undo"></i> Restore
                                             </button>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    title="Permanently Delete"
+                                                    onclick="forceDeleteProduct('{{ $product->id }}', '{{ $product->name }}')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -242,6 +248,41 @@
                     csrfToken.value = '{{ csrf_token() }}';
 
                     form.appendChild(csrfToken);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+
+        function forceDeleteProduct(id, name) {
+            Swal.fire({
+                title: 'Permanently Delete?',
+                html: `Are you sure you want to <strong>permanently delete</strong> <strong>${name}</strong>?<br><br><span class="text-danger">This action cannot be undone.</span>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-trash"></i> Yes, Delete Forever',
+                cancelButtonText: '<i class="fas fa-times-circle"></i> Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/product/${id}/force-delete`;
+
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+
+                    form.appendChild(csrfToken);
+                    form.appendChild(methodInput);
                     document.body.appendChild(form);
                     form.submit();
                 }
