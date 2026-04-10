@@ -78,7 +78,7 @@ class OnlinePaymentController extends Controller
             'data' => [
                 'attributes' => [
                     'line_items' => $lineItems,
-                    'payment_method_types' => ['gcash', 'card', 'paymaya', 'grab_pay'],
+                    'payment_method_types' => ['gcash', 'card', 'paymaya', 'grab_pay', 'qrph'],
                     'description' => 'Order #' . $order->id,
                     'reference_number' => (string) $order->id,
                     'success_url' => config('app.url') . '/payment/success?order_id=' . $order->id,
