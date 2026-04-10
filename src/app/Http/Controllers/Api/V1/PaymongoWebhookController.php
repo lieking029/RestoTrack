@@ -14,6 +14,13 @@ class PaymongoWebhookController extends Controller
 
     public function handle(Request $request)
     {
+        Log::info('PayMongo webhook HIT', [
+            'ip' => $request->ip(),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         Log::info('PayMongo webhook received', ['payload' => $request->all()]);
 
         $event = $request->input('data.attributes');
