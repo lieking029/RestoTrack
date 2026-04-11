@@ -50,9 +50,6 @@ class SalesReportDataTable extends DataTable
             ->editColumn('subtotal', function (Order $order) {
                 return '<span class="text-muted">₱' . number_format($order->subtotal, 2) . '</span>';
             })
-            ->editColumn('tax', function (Order $order) {
-                return '<span class="text-info">₱' . number_format($order->tax, 2) . '</span>';
-            })
             ->editColumn('status', function (Order $order) {
                 $badgeClass = match ($order->status->value) {
                     OrderStatus::COMPLETED => 'success',
@@ -108,7 +105,7 @@ class SalesReportDataTable extends DataTable
                     $query->whereDate('created_at', $keyword);
                 }
             })
-            ->rawColumns(['created_at', 'total', 'subtotal', 'tax', 'discount', 'amount_paid', 'status', 'cashier_name', 'items_count', 'actions']);
+            ->rawColumns(['created_at', 'total', 'subtotal', 'discount', 'amount_paid', 'status', 'cashier_name', 'items_count', 'actions']);
     }
 
     /**
@@ -202,10 +199,6 @@ class SalesReportDataTable extends DataTable
                 ->title('Subtotal')
                 ->addClass('text-end align-middle')
                 ->width(100),
-            Column::make('tax')
-                ->title('Tax')
-                ->addClass('text-end align-middle')
-                ->width(80),
             Column::make('total')
                 ->title('Total')
                 ->addClass('text-end align-middle')
