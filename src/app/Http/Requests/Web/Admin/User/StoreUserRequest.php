@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
             'middle_name' => ['nullable', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
             'last_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
             'user_type' => ['required', 'integer', 'in:0,1,2'],
             'employee_role' => ['required_if:user_type,2', 'nullable', 'string', 'in:cashier,cook,chef,server,barista'],

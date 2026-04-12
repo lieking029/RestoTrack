@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['sometimes', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
             'middle_name' => ['sometimes', 'nullable', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
             'last_name' => ['sometimes', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\.]+$/'],
-            'email' => ['sometimes', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
+            'email' => ['sometimes', 'string', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
             'password' => ['sometimes', 'nullable', 'string', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
             'user_type' => ['sometimes', 'integer', 'in:0,1,2'],
             'employee_role' => ['required_if:user_type,2', 'nullable', 'string', 'in:cashier,cook,chef,server,barista'],
