@@ -109,16 +109,15 @@ class Menu extends Model
      */
     public function hasIngredientsInStock(): bool
     {
+        if ($this->products->isEmpty()) {
+            return false;
+        }
+
         foreach ($this->products as $product) {
-            $quantityNeeded = $product->pivot->quantity_needed;
-            
-            // Check if there's enough stock
-            if ($product->remaining_stock < $quantityNeeded) {
-                return false;
-            }
-            
-            // Also check if product is out of stock
-            if ($product->isOutOfStock()) {
+            $quantityNeeded = (float) $product->pivot->quantity_needed;
+            $available = (float) ($product->inventoryItem->stock_quantity ?? $product->remaining_stock ?? 0);
+
+            if ($available < $quantityNeeded) {
                 return false;
             }
         }
@@ -142,20 +141,21 @@ class Menu extends Model
     public function getMissingIngredients()
     {
         $missing = [];
-        
+
         foreach ($this->products as $product) {
-            $quantityNeeded = $product->pivot->quantity_needed;
-            
-            if ($product->remaining_stock < $quantityNeeded) {
+            $quantityNeeded = (float) $product->pivot->quantity_needed;
+            $available = (float) ($product->inventoryItem->stock_quantity ?? $product->remaining_stock ?? 0);
+
+            if ($available < $quantityNeeded) {
                 $missing[] = [
                     'product' => $product,
                     'needed' => $quantityNeeded,
-                    'available' => $product->remaining_stock,
-                    'shortage' => $quantityNeeded - $product->remaining_stock,
+                    'available' => $available,
+                    'shortage' => $quantityNeeded - $available,
                 ];
             }
         }
-        
+
         return collect($missing);
     }
 

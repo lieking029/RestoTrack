@@ -10,7 +10,7 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::with('products')
+        $menus = Menu::with('products.inventoryItem')
             ->latest()
             ->get();
 
