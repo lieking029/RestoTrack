@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\InventoryItem;
 use App\Models\InventoryMovement;
+use App\Models\Menu;
 
 class InventoryService
 {
@@ -67,6 +68,8 @@ class InventoryService
                 'note' => "Deducted for paid order",
             ]);
         }
+
+        Menu::syncStatusForProducts(array_keys($aggregated));
     }
 
     public function restoreForCancelledOrder(Order $order, string $userId): void
@@ -120,5 +123,7 @@ class InventoryService
                 'note' => "Restored due to cancellation",
             ]);
         }
+
+        Menu::syncStatusForProducts(array_keys($aggregated));
     }
 }

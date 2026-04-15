@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\InventoryItem;
 use App\Models\InventoryMovement;
+use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
 
 class InventoryOpsService
@@ -27,6 +28,8 @@ class InventoryOpsService
                 'quantity' => $qty,
                 'note' => $note,
             ]);
+
+            Menu::syncStatusForProducts([$locked->product_id]);
         });
     }
 
@@ -53,6 +56,8 @@ class InventoryOpsService
                 'quantity' => $qty,
                 'note' => $note,
             ]);
+
+            Menu::syncStatusForProducts([$locked->product_id]);
         });
     }
 
@@ -86,6 +91,8 @@ class InventoryOpsService
                 'quantity' => abs($diff),
                 'note' => $note,
             ]);
+
+            Menu::syncStatusForProducts([$locked->product_id]);
         });
     }
 }

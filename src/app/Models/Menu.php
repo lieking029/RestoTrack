@@ -183,6 +183,34 @@ class Menu extends Model
         $this->save();
     }
 
+    /**
+     * Re-evaluate and persist the status of every menu that contains any of
+     * the given product IDs. Called from inventory services after any stock
+     * change so the stored `menus.status` stays in sync with actual ingredient
+     * stock, without relying on the admin UI to render and auto-flip it.
+     */
+    public static function syncStatusForProducts(array $productIds): void
+    {
+        if (empty($productIds)) {
+            return;
+        }
+
+        $menus = static::whereHas('products', function ($query) use ($productIds) {
+            $query->whereIn('products.id', $productIds);
+        })->with('products.inventoryItem')->get();
+
+        foreach ($menus as $menu) {
+            $desired = $menu->hasIngredientsInStock()
+                ? MenuStatus::Available
+                : MenuStatus::Unavailable;
+
+            if ($menu->status->value !== $desired) {
+                $menu->status = $desired;
+                $menu->saveQuietly();
+            }
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Query Scopes
