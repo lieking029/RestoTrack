@@ -17,6 +17,16 @@ class Product extends Model
 
     protected static function booted(): void
     {
+        static::creating(function (Product $product) {
+            if ($product->remaining_stock === null) {
+                $product->remaining_stock = $product->initial_stock;
+            }
+            if ($product->stock_out === null) {
+                $product->stock_out = '0';
+            }
+            $product->status = $product->calculateStatus();
+        });
+
         static::created(function (Product $product) {
             $product->inventoryItem()->create([
                 'stock_quantity' => $product->remaining_stock ?? $product->initial_stock,
