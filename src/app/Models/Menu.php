@@ -117,7 +117,14 @@ class Menu extends Model
 
         foreach ($this->products as $product) {
             $quantityNeeded = (float) $product->pivot->quantity_needed;
-            $available = (float) ($product->inventoryItem?->stock_quantity ?? 0);
+
+            $productStock = (float) ($product->remaining_stock ?? 0);
+            $inventoryStock = $product->inventoryItem
+                ? (float) $product->inventoryItem->stock_quantity
+                : $productStock;
+
+            // Fail-safe: use the lower of the two sources when they drift out of sync.
+            $available = min($productStock, $inventoryStock);
 
             if ($available < $quantityNeeded) {
                 return false;

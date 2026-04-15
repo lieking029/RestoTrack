@@ -6,9 +6,9 @@ use App\DataTables\MenuDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\Admin\Menu\StoreMenuRequest;
 use App\Http\Requests\Web\Admin\Menu\UpdateMenuRequest;
+use App\Models\InventoryItem;
 use App\Models\Menu;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
@@ -45,7 +45,9 @@ class MenuController extends Controller
             $validated['dish_picture'] = $imagePath;
         }
 
-        $validated['status'] = $request->has('status') ? 0 : 1;
+        $requestedAvailable = $request->has('status');
+        $hasStock = $this->ingredientsHaveSufficientStock($validated['ingredients'] ?? []);
+        $validated['status'] = ($requestedAvailable && $hasStock) ? 0 : 1;
 
         $menu = Menu::create($validated);
 
@@ -59,7 +61,11 @@ class MenuController extends Controller
             $menu->products()->attach($ingredients);
         }
 
-        alert()->success('Menu item has been created successfully!');
+        if ($requestedAvailable && !$hasStock) {
+            alert()->warning('Menu item created but marked as Unavailable because one or more ingredients have insufficient stock.');
+        } else {
+            alert()->success('Menu item has been created successfully!');
+        }
         return redirect()->route('admin.menu.index');
     }
 
@@ -102,8 +108,10 @@ class MenuController extends Controller
             $validated['dish_picture'] = $imagePath;
         }
 
-        // Set status
-        $validated['status'] = $request->has('status') ? 0 : 1;
+        // Set status — force Unavailable if any ingredient has insufficient stock
+        $requestedAvailable = $request->has('status');
+        $hasStock = $this->ingredientsHaveSufficientStock($validated['ingredients'] ?? []);
+        $validated['status'] = ($requestedAvailable && $hasStock) ? 0 : 1;
 
         // Update menu
         $menu->update($validated);
@@ -121,8 +129,51 @@ class MenuController extends Controller
             $menu->products()->detach();
         }
 
-        alert()->success('Menu item has been updated successfully!');
+        if ($requestedAvailable && !$hasStock) {
+            alert()->warning('Menu item updated but marked as Unavailable because one or more ingredients have insufficient stock.');
+        } else {
+            alert()->success('Menu item has been updated successfully!');
+        }
         return redirect()->route('admin.menu.index');
+    }
+
+    /**
+     * Check whether every ingredient in the submitted list has enough stock
+     * (using InventoryItem.stock_quantity as the source of truth) to satisfy
+     * the quantity_needed for one serving of the dish.
+     */
+    private function ingredientsHaveSufficientStock(array $ingredients): bool
+    {
+        if (empty($ingredients)) {
+            return false;
+        }
+
+        foreach ($ingredients as $ingredient) {
+            $productId = $ingredient['product_id'] ?? null;
+            $needed = (float) ($ingredient['quantity_needed'] ?? 0);
+
+            if (!$productId || $needed <= 0) {
+                return false;
+            }
+
+            $product = Product::find($productId);
+            if (!$product) {
+                return false;
+            }
+
+            $productStock = (float) ($product->remaining_stock ?? 0);
+            $inventory = InventoryItem::where('product_id', $productId)->first();
+            $inventoryStock = $inventory ? (float) $inventory->stock_quantity : $productStock;
+
+            // Use the lower of the two to fail-safe when sources drift out of sync.
+            $available = min($productStock, $inventoryStock);
+
+            if ($available < $needed) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
