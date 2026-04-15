@@ -143,7 +143,8 @@ class Product extends Model
     public function updateStock(float $quantity, bool $isAddition = false): void
     {
         if ($isAddition) {
-            $this->remaining_stock += $quantity;
+            $this->stock_out = max(0, $this->stock_out - $quantity);
+            $this->remaining_stock = max(0, $this->initial_stock - $this->stock_out);
         } else {
             $this->stock_out += $quantity;
             $this->remaining_stock = max(0, $this->initial_stock - $this->stock_out);
