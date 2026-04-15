@@ -94,7 +94,7 @@ class MenuDataTable extends DataTable
     public function query(Menu $model): QueryBuilder
     {
         return $model->newQuery()
-            ->with('products')
+            ->with('products.inventoryItem')
             ->select('menus.*');
     }
 

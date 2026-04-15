@@ -113,9 +113,11 @@ class Menu extends Model
             return false;
         }
 
+        $this->loadMissing('products.inventoryItem');
+
         foreach ($this->products as $product) {
             $quantityNeeded = (float) $product->pivot->quantity_needed;
-            $available = (float) ($product->inventoryItem->stock_quantity ?? $product->remaining_stock ?? 0);
+            $available = (float) ($product->inventoryItem?->stock_quantity ?? 0);
 
             if ($available < $quantityNeeded) {
                 return false;
@@ -140,11 +142,13 @@ class Menu extends Model
      */
     public function getMissingIngredients()
     {
+        $this->loadMissing('products.inventoryItem');
+
         $missing = [];
 
         foreach ($this->products as $product) {
             $quantityNeeded = (float) $product->pivot->quantity_needed;
-            $available = (float) ($product->inventoryItem->stock_quantity ?? $product->remaining_stock ?? 0);
+            $available = (float) ($product->inventoryItem?->stock_quantity ?? 0);
 
             if ($available < $quantityNeeded) {
                 $missing[] = [
@@ -170,32 +174,6 @@ class Menu extends Model
             $this->status = MenuStatus::Unavailable();
         }
         $this->save();
-    }
-
-    /**
-     * Deduct ingredients when menu item is ordered.
-     */
-    public function deductIngredients(int $quantity = 1): bool
-    {
-        if (!$this->hasIngredientsInStock()) {
-            return false;
-        }
-
-        foreach ($this->products as $product) {
-            $quantityNeeded = $product->pivot->quantity_needed * $quantity;
-            $newStock = $product->remaining_stock - $quantityNeeded;
-            
-            if ($newStock < 0) {
-                return false; // Not enough stock
-            }
-            
-            $product->updateStock($newStock);
-        }
-
-        // Update menu availability after deducting
-        $this->updateAvailability();
-        
-        return true;
     }
 
     /*
